@@ -1,0 +1,447 @@
+body {
+    background: #E5EEFF;
+    color: #787b8b;
+}
+
+.form {
+  display: grid;
+  place-items: center;
+}
+
+.text {
+    font-family: 'Open Sans', sans-serif;
+    color: #19255B;
+    font-size: 30px;
+    display: grid;
+    place-items: center;
+}
+
+.containerSelect {
+  display: none;
+  place-items: center;
+}
+
+.diagnostico {
+  font-family: 'Open Sans', sans-serif;
+  color: #19255B;
+  font-size: 18px;
+  display: none;
+  
+  
+}
+
+.taller {
+  font-family: 'Open Sans', sans-serif;
+  color: #19255B;
+  font-size: 18px;
+  margin-left: 10px;
+  display: none;
+} 
+
+.noUnidad{
+    font-family: 'Open Sans', sans-serif;
+    color: #19255B;
+    font-size: 20px;
+    justify-content: center;
+    display: flex;
+}
+
+select {
+    -moz-appearance: none;
+    -webkit-appearance: none;
+    -ms-appearance: none;
+    appearance: none;
+    outline: 0;
+    box-shadow: none;
+    border: 0!important;
+    background: #a1a2a3;
+    background-image: none;
+    flex: 1;
+    padding: 0 .5em;
+    color: #fff;
+    cursor: pointer;
+    font-size: 1em;
+    font-family: 'Open Sans', sans-serif;
+}
+
+select::-ms-expand {
+    display: none;
+ }
+
+.select {
+    position: relative;
+    display: flex;
+    width: 20em;
+    height: 3em;
+    line-height: 3;
+    background: #a1a2a3;
+    overflow: hidden;
+    border-radius: .25em;
+}
+
+.select::after {
+    content: '\25BC';
+    position: absolute;
+    top: 0;
+    right: 0;
+    padding: 0 1em;
+    background: #464646;
+    cursor: pointer;
+    pointer-events: none;
+    transition: .25s all ease;
+}
+
+.select:hover::after {
+    color: #E5EEFF;
+}
+
+/* Estilos específicos para el select con ID 'select-taller' */
+.select-taller {
+  display: inline-flex;
+  height: 10px;
+  margin-left: 0px;
+  /*margin:10px auto;*/
+  width: 90px;
+  /*-webkit-appearance: none;*/
+  height: 27px;
+  /* background-color: #ffffff; */
+  background-image: url('data:image/svg+xml;charset=US-ASCII,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%22292.4%22%20height%3D%22292.4%22%3E%3Cpath%20fill%3D%22%23007CB2%22%20d%3D%22M287%2069.4a17.6%2017.6%200%200%200-13-5.4H18.4c-5%200-9.3%201.8-12.9%205.4A17.6%2017.6%200%200%200%200%2082.2c0%205%201.8%209.3%205.4%2012.9l128%20127.9c3.6%203.6%207.8%205.4%2012.8%205.4s9.2-1.8%2012.8-5.4L287%2095c3.5-3.5%205.4-7.8%205.4-12.8%200-5-1.9-9.2-5.5-12.8z%22%2F%3E%3C%2Fsvg%3E'),
+      linear-gradient(to bottom, #a1a2a3 0%,#a1a2a3  100%);
+    background-repeat: no-repeat, repeat;
+    background-position: right .7em top 50%, 0 0;
+    background-size: .65em auto, 100%;
+}
+
+.taller-container {
+  display: flex;
+  align-items: center; /* Alinea verticalmente los elementos */
+  justify-content: flex-start; /* Alinea horizontalmente los elementos al principio */
+}
+
+.btn {
+    display: flex;
+    justify-content: center;
+}
+
+.button1 {
+    background-color: #195b35;
+    color: #F5F7FA;
+    border-radius: 12px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px 15px;
+}
+
+.button1:hover {
+    background-color: #457559;
+}
+  
+.button1:active {
+    background-color: #457559;
+}
+
+.button2 {
+    background-color: #8d0b0b;
+    color: #F5F7FA;
+    border-radius: 12px;
+    border: none;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 5px 15px;
+}
+
+.button2:hover {
+    background-color: #863232;
+}
+  
+.button2:active {
+    background-color: #863232;
+}
+
+.container {
+    border: solid 1px rgba(255, 255, 255, 0.2);
+}
+
+/* Customize the label (the container) */
+.radio {
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #19255B;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Hide the browser's default radio button */
+  .radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom radio button */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #ffffff;
+    border-radius: 50%;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .radio:hover input ~ .checkmark {
+    background-color: #ccc;
+  }
+  
+  /* When the radio button is checked, add a blue background */
+  .radio input:checked ~ .checkmark {
+    background-color: #2196F3;
+  }
+  
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the indicator (dot/circle) when checked */
+  .radio input:checked ~ .checkmark:after {
+    display: block;
+  }
+  
+  /* Style the indicator (dot/circle) */
+  .radio .checkmark:after {
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+  }
+
+  /* Customize the label (the container) */
+.radio2 {
+    display: inline-block;
+    position: relative;
+    padding-left: 25px;
+    margin-bottom: 20px;
+    cursor: pointer;
+    font-size: 18px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    color: #19255B;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  /* Hide the browser's default radio button */
+  .radio2 input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+  
+  /* Create a custom radio button */
+  .checkmark2 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #ffffff;
+    border-radius: 50%;
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .radio2:hover input ~ .checkmark2 {
+    background-color: #ccc;
+  }
+  
+  /* When the radio button is checked, add a blue background */
+  .radio2 input:checked ~ .checkmark2 {
+    background-color: #2196F3;
+  }
+  
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .checkmark2:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the indicator (dot/circle) when checked */
+  .radio2 input:checked ~ .checkmark2:after {
+    display: block;
+  }
+  
+  /* Style the indicator (dot/circle) */
+  .radio2 .checkmark2:after {
+    top: 6px;
+    left: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+  }
+
+   /* Customize the label (the container) */
+.radio3 {
+  display: inline-block;
+  position: relative;
+  padding-left: 25px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  font-size: 18px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  color: #19255B;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Hide the browser's default radio button */
+.radio3 input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+/* Create a custom radio button */
+.checkmark3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #ffffff;
+  border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.radio3:hover input ~ .checkmark3 {
+  background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.radio3 input:checked ~ .checkmark3 {
+  background-color: #2196F3;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark3:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.radio3 input:checked ~ .checkmark3:after {
+  display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.radio3 .checkmark3:after {
+  top: 6px;
+  left: 6px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: white;
+}
+
+.edoCaja{
+  color: #19255B;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+}
+
+.edoCaja2{
+  color: #19255B;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+}
+
+.edoCaja3{
+  color: #19255B;
+  font-family: 'Poppins', sans-serif;
+  font-size: 18px;
+}
+
+.radio-button-container {
+  display: flex;
+  flex-direction: column;
+  align-items: normal;
+  justify-content: center;
+  right: 10px; 
+}
+
+  /* Estilo para celdas rojas (mayor a 72 horas) */
+.rojo {
+  color: red;
+  font-weight: bold;
+}
+
+/* Estilo para celdas amarillas (entre 48 y 72 horas) */
+.amarillo {
+  color: rgb(255, 206, 43);
+  font-weight: bold;
+}
+
+/* Estilo para celdas verdes (menor a 48 horas) */
+.verde {
+  color: green;
+  font-weight: bold;
+}
+
+.black {
+  color: black;
+}
+
+/* Color verde para la cuenta regresiva en la columna "diagnostico" */
+.green {
+  color: green;
+}
+
+/* Color rojo para "Tiempo agotado" en la columna "diagnostico" */
+.red {
+  color: red;
+}
+
+@media (max-width: 800px) {
+  .table-container {
+    overflow-x: visible;
+  }
+}
+
+.ocultar-radio-buttons {
+  display: none;
+}
+
+#diagnostico {
+  width: 70px;
+}
+
+.divBtns {
+  display: flex;
+  width: 65vw;
+  justify-items: left;
+}
+
