@@ -80,7 +80,7 @@ function obtenerMovimientosCajas() {
 
 //let datosOriginales = {};
 
-function shouldTimerBeActive() {
+/*function shouldTimerBeActive() {
   const now = moment();
   const dayOfWeek = now.day(); // 0 (domingo) a 6 (sábado)
   const hour = now.hour();
@@ -99,7 +99,7 @@ function shouldTimerBeActive() {
   }
 
   return false;
-}
+}*/
 
 function actualizarTabla(data) {
   const tabla = document.getElementById('tablaMovimientos');
@@ -144,7 +144,7 @@ function actualizarTabla(data) {
     movimiento.diferenciaHoras = minutosDiferencia;
 
     const fechaTaller = moment(movimiento.fecha_envio_taller);
-    const diferenciaHorasTaller = shouldTimerBeActive() ? fechaActual.diff(fechaTaller, 'minutes') : 0;
+    const diferenciaHorasTaller = fechaActual.diff(fechaTaller, 'minutes');
     movimiento.diferenciaHorasTaller = diferenciaHorasTaller;
   
 
@@ -287,6 +287,11 @@ window.mostrarHistorico = function (row) {
           const data = instance.getSourceData();
           const datum = data[row];
           //console.log(datum);
+
+          // Agrega un evento de clic a las celdas de la columna 'diagnóstico'
+          td.addEventListener('click', function () {
+            mostrarModalTemporizador(datum);
+        });
           
           if (value === 'Tiempo agotado') {
             // Aplica el estilo de texto en rojo
@@ -329,6 +334,101 @@ window.mostrarHistorico = function (row) {
                 text: 'Error al obtener el histórico. Por favor, inténtalo de nuevo.',
             });
         });
+}
+
+function mostrarModalTemporizador(datum) {
+  // Variables para el control del temporizador
+  let temporizador;
+  let tiempoRestante = datum.diagnostico * 60; // Tiempo en segundos
+
+  // Función para actualizar el tiempo restante en el modal
+function actualizarTiempoRestante() {
+  const content = Swal.getPopup();
+  if (content) {
+      const horas = Math.floor(tiempoRestante / 3600);
+      const minutos = Math.floor((tiempoRestante % 3600) / 60);
+      content.querySelector('#tiempoRestante').innerText = `Tiempo restante: ${horas}h ${minutos}m`;
+  }
+}
+
+  // Función para pausar el temporizador
+  function pausarTemporizador() {
+      clearInterval(temporizador);
+      Swal.update({
+          showCancelButton: true,
+          showConfirmButton: false,
+          html: `
+              <p>Temporizador pausado</p>
+              <button id="reanudarBtn">Reanudar</button>
+              <button id="finalizarBtn">Finalizar</button>
+          `,
+      });
+  }
+
+  // Función para reanudar el temporizador
+  function reanudarTemporizador() {
+      temporizador = setInterval(function () {
+          tiempoRestante--;
+          actualizarTiempoRestante();
+          if (tiempoRestante <= 0) {
+              clearInterval(temporizador);
+              Swal.update({
+                  showCancelButton: false,
+                  showConfirmButton: true,
+                  html: '<p>Temporizador finalizado</p>',
+              });
+          }
+      }, 1000);
+
+      Swal.update({
+          showCancelButton: true,
+          showConfirmButton: false,
+          html: `
+              <p>Temporizador en curso</p>
+              <button id="pausarBtn">Pausar</button>
+              <button id="finalizarBtn">Finalizar</button>
+          `,
+      });
+  }
+
+  // Función para finalizar el temporizador
+  function finalizarTemporizador() {
+      clearInterval(temporizador);
+      Swal.close();
+  }
+
+  // Mostrar el modal inicial con el temporizador en curso
+  Swal.fire({
+      title: 'Temporizador',
+      html: `
+          <p id="tiempoRestante">Tiempo restante: ${datum.diagnostico}h</p>
+          <button id="pausarBtn">Pausar</button>
+          <button id="reanudarBtn">Reanudar</button>
+          <button id="finalizarBtn">Finalizar</button>
+      `,
+      showCloseButton: true,
+    showCancelButton: false,
+    showConfirmButton: false,
+    didOpen: () => {
+        // Evento de clic para el botón de pausa
+        Swal.getPopup().querySelector('#pausarBtn').addEventListener('click', function () {
+            pausarTemporizador();
+        });
+
+        // Evento de clic para el botón de reanudar
+        Swal.getPopup().querySelector('#reanudarBtn').addEventListener('click', function () {
+            reanudarTemporizador();
+        });
+
+        // Evento de clic para el botón de finalizar
+        Swal.getPopup().querySelector('#finalizarBtn').addEventListener('click', function () {
+            finalizarTemporizador();
+        });
+    }
+}).then(() => {
+    // Iniciar el temporizador después de que el modal se haya abierto
+    reanudarTemporizador();
+});
 }
 
 function construirHistoricoHTML(historico) {
@@ -627,13 +727,13 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function iniciarTimerTaller(numero_unidad, espacio_taller, tipoRegistro) {
 
-    console.log('Should Timer Be Active:', shouldTimerBeActive());
+    /*console.log('Should Timer Be Active:', shouldTimerBeActive());
     const isActive = shouldTimerBeActive();
 
     if (!isActive) {
       Swal.fire('Fuera de horario', 'El temporizador está pausado fuera del horario laboral', 'warning');
       return;
-    }
+    }*/
 
     const mensajeConfirmacion = tipoRegistro === 'entra'
         ? '¿Estás seguro de que deseas registrar esta unidad como ENTRA?'
