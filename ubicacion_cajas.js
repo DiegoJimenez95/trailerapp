@@ -94,7 +94,7 @@ function shouldTimerBeActive() {
   }
 
   // Verificar si es un día laboral (lunes a viernes) y está en el horario de 9 am a 2 pm o de 3 pm a 6 pm
-  if (dayOfWeek >= 1 && dayOfWeek <= 5 && ((hour >= 9 && hour < 14) || (hour >= 15 && hour < 18))) {
+  if (dayOfWeek >= 1 && dayOfWeek <= 5 && ((hour >= 9 && hour < 14) || (hour >= 15 && hour < 20))) {
     return true;
   }
 
@@ -339,7 +339,7 @@ function construirHistoricoHTML(historico) {
         // Utiliza moment para formatear la fecha
         const formattedFecha = moment(item.fecha).format('YYYY-MM-DDTHH:mm:ss');
 
-        html += `<li>${formattedFecha} - ${item.estado}</li>`;
+        html += `<li>${formattedFecha} - ${item.estado} - ${item.sucursal}</li>`;
     });
     html += '</ul>';
     return html;
