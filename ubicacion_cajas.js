@@ -149,7 +149,7 @@ function actualizarTabla(data) {
   
 
     // Agregar un console.log para depuración
-  console.log(`Registro #${index}: Diferencia de horas: ${minutosDiferencia}`);
+  //console.log(`Registro #${index}: Diferencia de horas: ${minutosDiferencia}`);
     
   movimiento.objetivo_traslado = movimiento.objetivo_traslado =
     movimiento.objetivo_traslado === 'Importacion' ? 'Importacion' :
