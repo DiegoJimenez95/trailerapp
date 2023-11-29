@@ -78,29 +78,6 @@ function obtenerMovimientosCajas() {
       });
 }
 
-//let datosOriginales = {};
-
-/*function shouldTimerBeActive() {
-  const now = moment();
-  const dayOfWeek = now.day(); // 0 (domingo) a 6 (sábado)
-  const hour = now.hour();
-
-  console.log('Day of Week:', dayOfWeek);
-  console.log('Current Hour:', hour);
-
-  // Verificar si es sábado (día 6) y está en el horario de 9 am a 2 pm
-  if (dayOfWeek === 6 && hour >= 9 && hour < 14) {
-    return true;
-  }
-
-  // Verificar si es un día laboral (lunes a viernes) y está en el horario de 9 am a 2 pm o de 3 pm a 6 pm
-  if (dayOfWeek >= 1 && dayOfWeek <= 5 && ((hour >= 9 && hour < 14) || (hour >= 15 && hour < 20))) {
-    return true;
-  }
-
-  return false;
-}*/
-
 function actualizarTabla(data) {
   const tabla = document.getElementById('tablaMovimientos');
   const tbody = tabla.querySelector('tbody');
@@ -287,11 +264,6 @@ window.mostrarHistorico = function (row) {
           const data = instance.getSourceData();
           const datum = data[row];
           //console.log(datum);
-
-          // Agrega un evento de clic a las celdas de la columna 'diagnóstico'
-          td.addEventListener('click', function () {
-            mostrarModalTemporizador(datum);
-        });
           
           if (value === 'Tiempo agotado') {
             // Aplica el estilo de texto en rojo
@@ -336,101 +308,6 @@ window.mostrarHistorico = function (row) {
         });
 }
 
-function mostrarModalTemporizador(datum) {
-  // Variables para el control del temporizador
-  let temporizador;
-  let tiempoRestante = datum.diagnostico * 60; // Tiempo en segundos
-
-  // Función para actualizar el tiempo restante en el modal
-function actualizarTiempoRestante() {
-  const content = Swal.getPopup();
-  if (content) {
-      const horas = Math.floor(tiempoRestante / 3600);
-      const minutos = Math.floor((tiempoRestante % 3600) / 60);
-      content.querySelector('#tiempoRestante').innerText = `Tiempo restante: ${horas}h ${minutos}m`;
-  }
-}
-
-  // Función para pausar el temporizador
-  function pausarTemporizador() {
-      clearInterval(temporizador);
-      Swal.update({
-          showCancelButton: true,
-          showConfirmButton: false,
-          html: `
-              <p>Temporizador pausado</p>
-              <button id="reanudarBtn">Reanudar</button>
-              <button id="finalizarBtn">Finalizar</button>
-          `,
-      });
-  }
-
-  // Función para reanudar el temporizador
-  function reanudarTemporizador() {
-      temporizador = setInterval(function () {
-          tiempoRestante--;
-          actualizarTiempoRestante();
-          if (tiempoRestante <= 0) {
-              clearInterval(temporizador);
-              Swal.update({
-                  showCancelButton: false,
-                  showConfirmButton: true,
-                  html: '<p>Temporizador finalizado</p>',
-              });
-          }
-      }, 1000);
-
-      Swal.update({
-          showCancelButton: true,
-          showConfirmButton: false,
-          html: `
-              <p>Temporizador en curso</p>
-              <button id="pausarBtn">Pausar</button>
-              <button id="finalizarBtn">Finalizar</button>
-          `,
-      });
-  }
-
-  // Función para finalizar el temporizador
-  function finalizarTemporizador() {
-      clearInterval(temporizador);
-      Swal.close();
-  }
-
-  // Mostrar el modal inicial con el temporizador en curso
-  Swal.fire({
-      title: 'Temporizador',
-      html: `
-          <p id="tiempoRestante">Tiempo restante: ${datum.diagnostico}h</p>
-          <button id="pausarBtn">Pausar</button>
-          <button id="reanudarBtn">Reanudar</button>
-          <button id="finalizarBtn">Finalizar</button>
-      `,
-      showCloseButton: true,
-    showCancelButton: false,
-    showConfirmButton: false,
-    didOpen: () => {
-        // Evento de clic para el botón de pausa
-        Swal.getPopup().querySelector('#pausarBtn').addEventListener('click', function () {
-            pausarTemporizador();
-        });
-
-        // Evento de clic para el botón de reanudar
-        Swal.getPopup().querySelector('#reanudarBtn').addEventListener('click', function () {
-            reanudarTemporizador();
-        });
-
-        // Evento de clic para el botón de finalizar
-        Swal.getPopup().querySelector('#finalizarBtn').addEventListener('click', function () {
-            finalizarTemporizador();
-        });
-    }
-}).then(() => {
-    // Iniciar el temporizador después de que el modal se haya abierto
-    reanudarTemporizador();
-});
-}
-
 function construirHistoricoHTML(historico) {
     // Construir el HTML del histórico según la estructura de tus datos
     // Puedes personalizar esto según el formato de tu histórico
@@ -472,11 +349,11 @@ function crearObjetoDatos(filaActualizada) {
 
   // Obtén los valores de las columnas
   const sucursal = filaActualizada[1];
-  const estado = filaActualizada[3];
-  const cargada = filaActualizada[4];
-  const objetivo_traslado = filaActualizada[5];
-  const estado_caja = filaActualizada[8];
-  const comentarios_mantenimiento = filaActualizada[11];
+  const estado = filaActualizada[4];
+  const cargada = filaActualizada[5];
+  const objetivo_traslado = filaActualizada[6];
+  const estado_caja = filaActualizada[9];
+  const comentarios_mantenimiento = filaActualizada[12];
 
   // Define las reglas de validación
   const reglaSucursal = /^(Queretaro|Nuevo Laredo|Mexico|Laredo, Texas)$/;
@@ -508,7 +385,7 @@ function crearObjetoDatos(filaActualizada) {
   const datos = {
     _id: filaActualizada[0],
     sucursal: sucursal,
-    fecha: filaActualizada[6], // Ajusta el índice según la posición de la columna "fecha" en tus datos
+    fecha: filaActualizada[7], // Ajusta el índice según la posición de la columna "fecha" en tus datos
     //diferenciaHoras: minutosDiferencia,
     estado: estado,
     cargada: transformarValorCargada(cargada),
@@ -726,14 +603,6 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   function iniciarTimerTaller(numero_unidad, espacio_taller, tipoRegistro) {
-
-    /*console.log('Should Timer Be Active:', shouldTimerBeActive());
-    const isActive = shouldTimerBeActive();
-
-    if (!isActive) {
-      Swal.fire('Fuera de horario', 'El temporizador está pausado fuera del horario laboral', 'warning');
-      return;
-    }*/
 
     const mensajeConfirmacion = tipoRegistro === 'entra'
         ? '¿Estás seguro de que deseas registrar esta unidad como ENTRA?'
