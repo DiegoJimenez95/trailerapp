@@ -8,6 +8,11 @@ body {
   place-items: center;
 }
 
+.registroForm {
+  display: grid;
+  place-items: center;
+}
+
 .text {
     font-family: 'Open Sans', sans-serif;
     color: #19255B;

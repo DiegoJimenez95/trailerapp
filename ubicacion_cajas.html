@@ -12,98 +12,105 @@
         <form class="form">
             <h2 class="text">Control de cajas</h2>
                 <div class="noUnidad"><b>Unidad: </b><span id="no_unidad"></span></div><br>
-                <div class="select">
-                    <select id="sucursalSelect">
-                        <option>Queretaro</option>
-                        <option>Nuevo Laredo</option>
-                        <option>Mexico</option>
-                        <option>Laredo, Texas</option>
-                    </select>
-                </div>
-                <div class="radio-button-container">
-                    <div class="radio-buttons"><p class="edoCaja"><b>Estatus Caja: </b></p>
-                        <label class="radio">
-                            <input type="radio" name="estadoCaja" value="1" style="margin: 5px" checked="checked">
-                            Cargada
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="estadoCaja" value="0" style="margin: 10px">
-                            Vacía
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="estadoCaja" value="2" style="margin: 10px">
-                            Descarga
-                            <span class="checkmark"></span>
-                        </label>
-                        <label class="radio">
-                            <input type="radio" name="estadoCaja" value="3" style="margin: 10px">
-                            Dedicada
-                            <span class="checkmark"></span>
-                        </label>
-                    </div>
-                    <div class="radio-buttons2"><p class="edoCaja2"><b>Estado Caja: </b></p>
-                        <label class="radio2" style="margin: 0px">
-                            <input type="radio" name="estadoCaja2" value="Bueno" style="margin: 10px" checked="checked2">
-                            Bueno
-                            <span class="checkmark2"></span>
-                        </label>
-                        <label class="radio2">
-                            <input type="radio" name="estadoCaja2" value="Necesita Mantenimiento" style="margin: 10px">
-                            Necesita Mantenimiento
-                            <span class="checkmark2"></span>
-                        </label>
-                        <!-- Agregar un campo para comentarios -->
-                        <div id="comentariosDiv" style="display: none;">
-                            <input type="textarea" id="comentarios" placeholder="Ingresar comentarios">
+                    <div id="registroForm" class="registroForm">
+                        <div class="select">
+                            <select id="sucursalSelect">
+                                <option>Queretaro</option>
+                                <option>Nuevo Laredo</option>
+                                <option>Mexico</option>
+                                <option>Laredo, Texas</option>
+                            </select>
+                        </div>
+                        <div class="radio-button-container">
+                            <div class="radio-buttons"><p class="edoCaja"><b>Estatus Caja: </b></p>
+                                <label class="radio">
+                                    <input type="radio" name="estadoCaja" value="1" style="margin: 5px" checked="checked">
+                                    Cargada
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="estadoCaja" value="0" style="margin: 10px">
+                                    Vacía
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="estadoCaja" value="2" style="margin: 10px">
+                                    Descarga
+                                    <span class="checkmark"></span>
+                                </label>
+                                <label class="radio">
+                                    <input type="radio" name="estadoCaja" value="3" style="margin: 10px">
+                                    Dedicada
+                                    <span class="checkmark"></span>
+                                </label>
+                            </div>
+                            <div class="radio-buttons2"><p class="edoCaja2"><b>Estado Caja: </b></p>
+                                <label class="radio2" style="margin: 0px">
+                                    <input type="radio" name="estadoCaja2" value="Bueno" style="margin: 10px" checked="checked2">
+                                    Bueno
+                                    <span class="checkmark2"></span>
+                                </label>
+                                <label class="radio2">
+                                    <input type="radio" name="estadoCaja2" value="Necesita Mantenimiento" style="margin: 10px">
+                                    Necesita Mantenimiento
+                                    <span class="checkmark2"></span>
+                                </label>
+                                <!-- Agregar un campo para comentarios -->
+                                <div id="comentariosDiv" style="display: none;">
+                                    <input type="textarea" id="comentarios" placeholder="Ingresar comentarios">
+                                </div>
+                            </div>
+                            <div id="diagnosticoDiv" class="diagnostico" style="margin: 10px">
+                                <b>Diagnostico: </b>
+                                <input type="number" id="diagnostico" placeholder="ingresar"><span style="margin: 3px">horas</span>
+                        </div>
+                        <div id="tallerDiv" class="taller" style="margin: 10px">
+                                <span><b>Taller: </b></span>
+                                <select id="select-taller" class="select-taller">
+                                    <option value="N/A">N/A</option>
+                                    <option value="1">1</option>
+                                    <option value="2">2</option>
+                                    <option value="3">3</option>
+                                    <option value="4">4</option>
+                                    <option value="5">5</option>
+                                    <option value="6">6</option>
+                                    <option value="7">7</option>
+                                    <option value="8">8</option>
+                                    <option value="9">9</option>
+                                </select>
+                            </div>
+                            <div class="ocultar-radio-buttons" id="radio-buttons3"><p class="edoCaja3"><b>Destino: </b></p>
+                                <label class="radio3">
+                                    <input type="radio" name="estadoCaja3" value="N/A" style="margin: 5px" checked="checked3">
+                                    N/A
+                                    <span class="checkmark3"></span>
+                                </label>
+                                <label class="radio3">
+                                    <input type="radio" name="estadoCaja3" value="Exportacion" style="margin: 10px">
+                                    Exportación
+                                    <span class="checkmark3"></span>
+                                </label>
+                                <label class="radio3">
+                                    <input type="radio" name="estadoCaja3" value="Importacion" style="margin: 10px">
+                                    Importación
+                                    <span class="checkmark3"></span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="btn">
+                            <button type="button" id="btnEntra" style="margin: 10px" class="button1">ENTRA</button>
+                            <button type="button" id="btnSale" style="margin: 10px" class="button2">SALE</button>
+                        </div>
+                        <div class="divBtns">
+                                <button type="button" id="limpiarFiltros" style="margin: 3px" class="btnFiltros">Limpiar Filtros</button>
+                                <button type="button" id="editar" style="margin: 3px" class="btnEditar">Editar</button>
                         </div>
                     </div>
-                    <div id="diagnosticoDiv" class="diagnostico" style="margin: 10px">
-                        <b>Diagnostico: </b>
-                        <input type="number" id="diagnostico" placeholder="ingresar"><span style="margin: 3px">horas</span>
-                   </div>
-                   <div id="tallerDiv" class="taller" style="margin: 10px">
-                        <span><b>Taller: </b></span>
-                        <select id="select-taller" class="select-taller">
-                            <option value="N/A">N/A</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                        </select>
+                    <!-- Agregar este div donde quieras mostrar los datos -->
+                    <div id="infoDiagnostico" class="form" style="display: none;">
+                        <p><b>Diagnóstico:</b> <span id="diagnosticoValor"></span></p>
+                        <p><b>Taller:</b> <span id="tallerValor"></span></p>
                     </div>
-                    <div class="ocultar-radio-buttons" id="radio-buttons3"><p class="edoCaja3"><b>Destino: </b></p>
-                        <label class="radio3">
-                            <input type="radio" name="estadoCaja3" value="N/A" style="margin: 5px" checked="checked3">
-                            N/A
-                            <span class="checkmark3"></span>
-                        </label>
-                        <label class="radio3">
-                            <input type="radio" name="estadoCaja3" value="Exportacion" style="margin: 10px">
-                            Exportación
-                            <span class="checkmark3"></span>
-                        </label>
-                        <label class="radio3">
-                            <input type="radio" name="estadoCaja3" value="Importacion" style="margin: 10px">
-                            Importación
-                            <span class="checkmark3"></span>
-                        </label>
-                    </div>
-                </div>
-                <div class="btn">
-                    <button type="button" id="btnEntra" style="margin: 10px" class="button1">ENTRA</button>
-                    <button type="button" id="btnSale" style="margin: 10px" class="button2">SALE</button>
-                </div>
-                <div class="divBtns">
-                        <button type="button" id="limpiarFiltros" style="margin: 3px" class="btnFiltros">Limpiar Filtros</button>
-                        <button type="button" id="editar" style="margin: 3px" class="btnEditar">Editar</button>
-                </div>
                 <div class="table-container">
                     <div id="tabla2" style="margin: 10px"></div>
                 </div>

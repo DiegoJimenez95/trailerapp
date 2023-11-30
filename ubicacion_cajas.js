@@ -98,7 +98,7 @@ function actualizarTabla(data) {
     "3MAD0077": "3MAD0077S",
     "3MA0074s": "3MA0074S",
     "3MAD171935": "3MAD17193S",
-    "3MAD21231": "3MAD21231S",
+    //"3MAD21231": "3MAD21231S",
     "3MAD14100": "3MAD14100S",
     // Agrega más mapeos según sea necesario
   };
@@ -171,8 +171,61 @@ function actualizarTabla(data) {
 
     } else if (movimiento.diagnostico != null) {
       movimiento.diagnostico = movimiento.diagnostico + ' hora(s)'
-    } 
+    }
 
+    // Obtener el número de unidad de los parámetros de la URL
+const { numero_unidad } = obtenerParametrosURL();
+
+// Obtener el registro correspondiente al número de unidad
+const registroUnidad = registrosMasRecientes[numero_unidad];
+
+if (registroUnidad) {
+  // Mostrar los datos solo si hay un número de taller y el temporizador está en curso
+  if (registroUnidad.espacio_taller !== 'N/A' && registroUnidad.diagnostico !== 'Tiempo agotado') {
+    document.getElementById('diagnosticoValor').textContent = registroUnidad.diagnostico;
+    document.getElementById('tallerValor').textContent = registroUnidad.espacio_taller;
+    document.getElementById('infoDiagnostico').style.display = 'block';
+  } else {
+    // Ocultar el div si no hay número de taller o el temporizador ha expirado
+    document.getElementById('infoDiagnostico').style.display = 'none';
+  }
+}
+
+// Llamar a la función de verificación periódica cada 1000 milisegundos (1 segundo)
+setInterval(() => {
+  actualizarInformacionDiagnostico(registrosMasRecientes);
+}, 1000);
+
+// Definir la función de verificación periódica
+function actualizarInformacionDiagnostico(registrosMasRecientes) {
+  // Obtener el número de unidad de los parámetros de la URL
+  const { numero_unidad } = obtenerParametrosURL();
+
+  // Obtener el registro correspondiente al número de unidad
+  const registroUnidad = registrosMasRecientes[numero_unidad];
+
+  // Obtener referencias a los elementos del DOM
+  const diagnosticoElement = document.getElementById('diagnosticoValor');
+  const tallerElement = document.getElementById('tallerValor');
+  const infoDiagnosticoElement = document.getElementById('infoDiagnostico');
+
+  // Verificar si los elementos existen antes de intentar modificar sus propiedades
+  if (diagnosticoElement && tallerElement && infoDiagnosticoElement) {
+    if (registroUnidad) {
+      // Mostrar los datos solo si hay un número de taller y el temporizador está en curso
+      if (registroUnidad.espacio_taller !== 'N/A' && registroUnidad.diagnostico !== 'Tiempo agotado') {
+        diagnosticoElement.textContent = registroUnidad.diagnostico;
+        tallerElement.textContent = registroUnidad.espacio_taller;
+        infoDiagnosticoElement.style.display = 'block';
+      } else {
+        // Ocultar el div si no hay número de taller o el temporizador ha expirado
+        infoDiagnosticoElement.style.display = 'none';
+      }
+    }
+  } else {
+    console.error('Alguno de los elementos del DOM no existe.');
+  }
+}
   });
 
   const tablaAnterior = document.getElementById('tablaMovimientos');
