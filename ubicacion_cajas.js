@@ -174,30 +174,30 @@ function actualizarTabla(data) {
     }
 
     // Obtener el número de unidad de los parámetros de la URL
-const { numero_unidad } = obtenerParametrosURL();
+    /*const { numero_unidad } = obtenerParametrosURL();
 
-// Obtener el registro correspondiente al número de unidad
-const registroUnidad = registrosMasRecientes[numero_unidad];
+    // Obtener el registro correspondiente al número de unidad
+    const registroUnidad = registrosMasRecientes[numero_unidad];
 
-if (registroUnidad) {
-  // Mostrar los datos solo si hay un número de taller y el temporizador está en curso
-  if (registroUnidad.espacio_taller !== 'N/A' && registroUnidad.diagnostico !== 'Tiempo agotado') {
-    document.getElementById('diagnosticoValor').textContent = registroUnidad.diagnostico;
-    document.getElementById('tallerValor').textContent = registroUnidad.espacio_taller;
-    document.getElementById('infoDiagnostico').style.display = 'block';
-  } else {
-    // Ocultar el div si no hay número de taller o el temporizador ha expirado
-    document.getElementById('infoDiagnostico').style.display = 'none';
-  }
-}
+    if (registroUnidad) {
+      // Mostrar los datos solo si hay un número de taller y el temporizador está en curso
+      if (registroUnidad.espacio_taller !== 'N/A' && registroUnidad.diagnostico !== 'Tiempo agotado') {
+        document.getElementById('diagnosticoValor').textContent = registroUnidad.diagnostico;
+        document.getElementById('tallerValor').textContent = registroUnidad.espacio_taller;
+        document.getElementById('infoDiagnostico').style.display = 'block';
+      } else {
+        // Ocultar el div si no hay número de taller o el temporizador ha expirado
+        document.getElementById('infoDiagnostico').style.display = 'none';
+      }
+    }
 
-// Llamar a la función de verificación periódica cada 1000 milisegundos (1 segundo)
-setInterval(() => {
-  actualizarInformacionDiagnostico(registrosMasRecientes);
-}, 1000);
+    // Llamar a la función de verificación periódica cada 1000 milisegundos (1 segundo)
+    setInterval(() => {
+      actualizarInformacionDiagnostico(registrosMasRecientes);
+    }, 1000);
 
-// Definir la función de verificación periódica
-function actualizarInformacionDiagnostico(registrosMasRecientes) {
+  // Definir la función de verificación periódica
+  function actualizarInformacionDiagnostico(registrosMasRecientes) {
   // Obtener el número de unidad de los parámetros de la URL
   const { numero_unidad } = obtenerParametrosURL();
 
@@ -208,24 +208,27 @@ function actualizarInformacionDiagnostico(registrosMasRecientes) {
   const diagnosticoElement = document.getElementById('diagnosticoValor');
   const tallerElement = document.getElementById('tallerValor');
   const infoDiagnosticoElement = document.getElementById('infoDiagnostico');
+  const registroFormElement = document.getElementById('registroForm');
 
   // Verificar si los elementos existen antes de intentar modificar sus propiedades
-  if (diagnosticoElement && tallerElement && infoDiagnosticoElement) {
+  if (diagnosticoElement && tallerElement && infoDiagnosticoElement && registroFormElement) {
     if (registroUnidad) {
-      // Mostrar los datos solo si hay un número de taller y el temporizador está en curso
+      // Mostrar el div "infoDiagnostico" solo si hay un número de taller y el temporizador está en curso
       if (registroUnidad.espacio_taller !== 'N/A' && registroUnidad.diagnostico !== 'Tiempo agotado') {
         diagnosticoElement.textContent = registroUnidad.diagnostico;
         tallerElement.textContent = registroUnidad.espacio_taller;
         infoDiagnosticoElement.style.display = 'block';
+        registroFormElement.style.display = 'none';  // Ocultar el div "registroForm"
       } else {
-        // Ocultar el div si no hay número de taller o el temporizador ha expirado
+        // Ocultar el div "infoDiagnostico" y mostrar "registroForm" en otros casos
         infoDiagnosticoElement.style.display = 'none';
+        registroFormElement.style.display = 'block';  // Mostrar el div "registroForm"
       }
     }
   } else {
     console.error('Alguno de los elementos del DOM no existe.');
   }
-}
+}*/
   });
 
   const tablaAnterior = document.getElementById('tablaMovimientos');

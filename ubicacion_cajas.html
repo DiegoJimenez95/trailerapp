@@ -63,21 +63,21 @@
                             <div id="diagnosticoDiv" class="diagnostico" style="margin: 10px">
                                 <b>Diagnostico: </b>
                                 <input type="number" id="diagnostico" placeholder="ingresar"><span style="margin: 3px">horas</span>
-                        </div>
-                        <div id="tallerDiv" class="taller" style="margin: 10px">
-                                <span><b>Taller: </b></span>
-                                <select id="select-taller" class="select-taller">
-                                    <option value="N/A">N/A</option>
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                    <option value="5">5</option>
-                                    <option value="6">6</option>
-                                    <option value="7">7</option>
-                                    <option value="8">8</option>
-                                    <option value="9">9</option>
-                                </select>
+                            </div>
+                            <div id="tallerDiv" class="taller" style="margin: 10px">
+                                    <span><b>Taller: </b></span>
+                                    <select id="select-taller" class="select-taller">
+                                        <option value="N/A">N/A</option>
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                        <option value="3">3</option>
+                                        <option value="4">4</option>
+                                        <option value="5">5</option>
+                                        <option value="6">6</option>
+                                        <option value="7">7</option>
+                                        <option value="8">8</option>
+                                        <option value="9">9</option>
+                                    </select>
                             </div>
                             <div class="ocultar-radio-buttons" id="radio-buttons3"><p class="edoCaja3"><b>Destino: </b></p>
                                 <label class="radio3">
@@ -107,9 +107,16 @@
                         </div>
                     </div>
                     <!-- Agregar este div donde quieras mostrar los datos -->
-                    <div id="infoDiagnostico" class="form" style="display: none;">
-                        <p><b>Diagnóstico:</b> <span id="diagnosticoValor"></span></p>
-                        <p><b>Taller:</b> <span id="tallerValor"></span></p>
+                    <div id="infoDiagnostico" style="display: none;">
+                        <div class="formTimer">
+                            <p><b>Diagnóstico:</b> <span id="diagnosticoValor"></span></p>
+                            <p><b>Taller:</b> <span id="tallerValor"></span></p>
+                        </div>
+                        <div class="divBtnsTimer">
+                            <button type="button" id="pausar" style="margin: 3px">Pausar</button>
+                            <button type="button" id="reanudar" style="margin: 3px">Reanudar</button>
+                            <button type="button" id="finalizar" style="margin: 3px">Finalizar</button>
+                        </div>
                     </div>
                 <div class="table-container">
                     <div id="tabla2" style="margin: 10px"></div>
