@@ -277,7 +277,7 @@ window.mostrarHistorico = function (row) {
       manualColumnResize: true,
       colWidths: [100, 100, 120, 110, 90, 80, 80, 130, 150, 150, 100, 100, 370,],
       filters: true, // Habilita los filtros
-      dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'], // Tipo de filtro
+      dropdownMenu: true, //['filter_by_condition', 'filter_by_value', 'filter_action_bar'], // Tipo de filtro
       licenseKey: 'non-commercial-and-evaluation',
       hiddenColumns: {
         columns: [0],
@@ -340,6 +340,11 @@ window.mostrarHistorico = function (row) {
         return cellProperties;
       },
   });
+
+  hot.addHook('afterFilter', function () {
+    console.log('Filtros aplicados con éxito');
+});
+
 
   hot_global = hot;
 
@@ -673,12 +678,17 @@ document.addEventListener('DOMContentLoaded', function () {
         cancelButtonText: 'Cancelar',
     }).then((result) => {
         if (result.isConfirmed) {
+            // Obtener el valor del diagnóstico desde el input
+            const diagnosticoInput = document.getElementById('diagnostico');
+            const diagnostico = diagnosticoInput ? parseInt(diagnosticoInput.value) : null;
+
             let url = 'https://quintaapp.com.mx:3008/cajas/modificar-taller';
             // Crear un objeto de datos que se enviará en la solicitud POST
             let data = {
                 "numero_unidad": numero_unidad,
                 "espacio_taller": espacio_taller,
                 "fecha_envio_taller": moment().format(),
+                "diagnostico": diagnostico, // Agregar el diagnóstico al objeto de datos
             };
 
             fetch(url, {
