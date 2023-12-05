@@ -174,7 +174,7 @@ function actualizarTabla(data) {
     }
 
     // Obtener el número de unidad de los parámetros de la URL
-    /*const { numero_unidad } = obtenerParametrosURL();
+    const { numero_unidad } = obtenerParametrosURL();
 
     // Obtener el registro correspondiente al número de unidad
     const registroUnidad = registrosMasRecientes[numero_unidad];
@@ -191,11 +191,6 @@ function actualizarTabla(data) {
       }
     }
 
-    // Llamar a la función de verificación periódica cada 1000 milisegundos (1 segundo)
-    setInterval(() => {
-      actualizarInformacionDiagnostico(registrosMasRecientes);
-    }, 1000);
-
   // Definir la función de verificación periódica
   function actualizarInformacionDiagnostico(registrosMasRecientes) {
   // Obtener el número de unidad de los parámetros de la URL
@@ -210,25 +205,33 @@ function actualizarTabla(data) {
   const infoDiagnosticoElement = document.getElementById('infoDiagnostico');
   const registroFormElement = document.getElementById('registroForm');
 
-  // Verificar si los elementos existen antes de intentar modificar sus propiedades
-  if (diagnosticoElement && tallerElement && infoDiagnosticoElement && registroFormElement) {
-    if (registroUnidad) {
-      // Mostrar el div "infoDiagnostico" solo si hay un número de taller y el temporizador está en curso
-      if (registroUnidad.espacio_taller !== 'N/A' && registroUnidad.diagnostico !== 'Tiempo agotado') {
-        diagnosticoElement.textContent = registroUnidad.diagnostico;
-        tallerElement.textContent = registroUnidad.espacio_taller;
-        infoDiagnosticoElement.style.display = 'block';
-        registroFormElement.style.display = 'none';  // Ocultar el div "registroForm"
-      } else {
-        // Ocultar el div "infoDiagnostico" y mostrar "registroForm" en otros casos
-        infoDiagnosticoElement.style.display = 'none';
-        registroFormElement.style.display = 'block';  // Mostrar el div "registroForm"
-      }
-    }
+  // Agregar console.log para depuración
+  //console.log('diagnostico:', registroUnidad.diagnostico);
+  //console.log('espacio_taller:', registroUnidad.espacio_taller);
+
+  // Verificar si ambos campos son null o undefined o "N/A"
+  const diagnosticoIsNull = registroUnidad.diagnostico === null || registroUnidad.diagnostico === undefined || registroUnidad.diagnostico === 'N/A';
+  const tallerIsNull = registroUnidad.espacio_taller === null || registroUnidad.espacio_taller === undefined || registroUnidad.espacio_taller === 'N/A';
+
+  if (diagnosticoIsNull && tallerIsNull) {
+      // Ambos campos son null, undefined o "N/A", ocultar "infoDiagnostico" y mostrar "registroForm"
+      infoDiagnosticoElement.style.display = 'none';
+      registroFormElement.style.display = 'block';
   } else {
+      // Al menos uno de los campos no es null, undefined ni "N/A", mostrar "infoDiagnostico"
+      diagnosticoElement.textContent = registroUnidad.diagnostico;
+      tallerElement.textContent = registroUnidad.espacio_taller;
+      infoDiagnosticoElement.style.display = 'block';
+      registroFormElement.style.display = 'none';
+  } /*else {
     console.error('Alguno de los elementos del DOM no existe.');
-  }
 }*/
+}
+
+// Llamar a la función de verificación periódica cada 1000 milisegundos (1 segundo)
+setInterval(() => {
+  actualizarInformacionDiagnostico(registrosMasRecientes);
+}, 1000);
   });
 
   const tablaAnterior = document.getElementById('tablaMovimientos');

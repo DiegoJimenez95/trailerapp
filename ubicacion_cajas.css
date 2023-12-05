@@ -450,7 +450,7 @@ select::-ms-expand {
   justify-items: left;
 }
 
-/*.divBtnsTimer {
+.divBtnsTimer {
   display: flex;
   justify-items: left;
-}*/
+}
