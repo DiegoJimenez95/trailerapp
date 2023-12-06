@@ -435,9 +435,24 @@ select::-ms-expand {
   color: red;
 }
 
-@media (max-width: 800px) {
-  .table-container {
-    overflow-x: visible;
+/*.table-container {
+  overflow-x: auto;
+  width: 100vw;
+  height: 100vh;
+}*/
+
+/* Estilo base para la tabla */
+#tabla2 {
+  width: 90vw;
+  height: 100vh;
+  overflow-x: auto;
+}
+
+/* Estilos específicos para tamaños de pantalla más pequeños */
+@media only screen and (max-width: 600px) {
+  #tabla2 {
+      font-size: 12px; /* Ajusta el tamaño de fuente para pantallas pequeñas */
+      /* Añade cualquier otro estilo necesario para pantallas pequeñas */
   }
 }
 

@@ -213,17 +213,22 @@ function actualizarTabla(data) {
   const diagnosticoIsNull = registroUnidad.diagnostico === null || registroUnidad.diagnostico === undefined || registroUnidad.diagnostico === 'N/A';
   const tallerIsNull = registroUnidad.espacio_taller === null || registroUnidad.espacio_taller === undefined || registroUnidad.espacio_taller === 'N/A';
 
-  if (diagnosticoIsNull && tallerIsNull) {
-      // Ambos campos son null, undefined o "N/A", ocultar "infoDiagnostico" y mostrar "registroForm"
+  // Verificar si el diagnostico es "Tiempo agotado" y espacio_taller no es "N/A"
+  const diagnosticoEsTiempoAgotado = registroUnidad.diagnostico === 'Tiempo agotado';
+  const espacioTallerEsNumero = !isNaN(registroUnidad.espacio_taller);
+
+  if ((diagnosticoIsNull && tallerIsNull) || (diagnosticoEsTiempoAgotado && espacioTallerEsNumero)) {
+      // Ambos campos son null, undefined o "N/A", o diagnostico es "Tiempo agotado" y espacio_taller es un número, ocultar "infoDiagnostico" y mostrar "registroForm"
       infoDiagnosticoElement.style.display = 'none';
-      registroFormElement.style.display = 'block';
+      registroFormElement.hidden = false;
   } else {
-      // Al menos uno de los campos no es null, undefined ni "N/A", mostrar "infoDiagnostico"
+      // Al menos uno de los campos no es null, undefined ni "N/A", o diagnostico no es "Tiempo agotado" o espacio_taller no es un número, mostrar "infoDiagnostico"
       diagnosticoElement.textContent = registroUnidad.diagnostico;
       tallerElement.textContent = registroUnidad.espacio_taller;
       infoDiagnosticoElement.style.display = 'block';
       registroFormElement.style.display = 'none';
-  } /*else {
+  }
+ /*else {
     console.error('Alguno de los elementos del DOM no existe.');
 }*/
 }
@@ -551,6 +556,47 @@ if (datos) {
 }
 });
 
+// Define variables para almacenar la fecha de pausa y la duración del temporizador
+/*let fechaPausa;
+let duracionTimer = 0; // Duración inicial del temporizador (en segundos)
+
+// Agrega eventos de escucha a los botones
+document.getElementById('pausar').addEventListener('click', function () {
+    // Pausar el temporizador
+    fechaPausa = new Date();
+    console.log('Temporizador pausado en: ' + fechaPausa);
+});
+
+document.getElementById('reanudar').addEventListener('click', function () {
+    // Reanudar el temporizador
+    if (fechaPausa) {
+        const fechaReanudar = new Date();
+        const tiempoTranscurrido = (fechaReanudar - fechaPausa) / 1000; // Diferencia en segundos
+
+        // Sumar el tiempo transcurrido al temporizador
+        duracionTimer += tiempoTranscurrido;
+
+        console.log('Temporizador reanudado en: ' + fechaReanudar);
+        console.log('Nuevo tiempo transcurrido: ' + duracionTimer + ' segundos');
+
+        // Obtener la duración ingresada por el usuario desde el input
+        const duracionIngresada = parseFloat(document.getElementById('diagnostico').value);
+
+        // Calcular el nuevo tiempo restante del temporizador
+        const tiempoRestante = duracionIngresada * 3600 - duracionTimer;
+
+        console.log('Nuevo tiempo restante: ' + tiempoRestante + ' segundos');
+        
+        // Actualizar la fecha de finalización del temporizador
+        const fechaFin = new Date();
+        fechaFin.setSeconds(fechaFin.getSeconds() + tiempoRestante);
+        console.log('Nueva fecha de finalización: ' + fechaFin);
+    } else {
+        console.log('Error: No se ha pausado el temporizador previamente.');
+    }
+});*/
+
+
 document.addEventListener('DOMContentLoaded', function () {
     // Llamar a obtenerMovimientosCajas al cargar la página
     obtenerMovimientosCajas();
@@ -682,8 +728,8 @@ document.addEventListener('DOMContentLoaded', function () {
     }).then((result) => {
         if (result.isConfirmed) {
             // Obtener el valor del diagnóstico desde el input
-            const diagnosticoInput = document.getElementById('diagnostico');
-            const diagnostico = diagnosticoInput ? parseInt(diagnosticoInput.value) : null;
+            //const diagnosticoInput = document.getElementById('diagnostico');
+            //const diagnostico = diagnosticoInput ? parseInt(diagnosticoInput.value) : null;
 
             let url = 'https://quintaapp.com.mx:3008/cajas/modificar-taller';
             // Crear un objeto de datos que se enviará en la solicitud POST
@@ -691,7 +737,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 "numero_unidad": numero_unidad,
                 "espacio_taller": espacio_taller,
                 "fecha_envio_taller": moment().format(),
-                "diagnostico": diagnostico, // Agregar el diagnóstico al objeto de datos
+                //"diagnostico": diagnostico, // Agregar el diagnóstico al objeto de datos
             };
 
             fetch(url, {
