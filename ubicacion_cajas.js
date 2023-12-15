@@ -2,7 +2,7 @@ let hot_global;
 
 let numero_fila;
 
-//let mostrarHistorico;
+//let estadoTimer;
 
 function obtenerParametrosURL() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -173,71 +173,88 @@ function actualizarTabla(data) {
       movimiento.diagnostico = movimiento.diagnostico + ' hora(s)'
     }
 
-    // Obtener el número de unidad de los parámetros de la URL
-    const { numero_unidad } = obtenerParametrosURL();
+    
+  });
 
-    // Obtener el registro correspondiente al número de unidad
-    const registroUnidad = registrosMasRecientes[numero_unidad];
-
-    if (registroUnidad) {
-      // Mostrar los datos solo si hay un número de taller y el temporizador está en curso
-      if (registroUnidad.espacio_taller !== 'N/A' && registroUnidad.diagnostico !== 'Tiempo agotado') {
-        document.getElementById('diagnosticoValor').textContent = registroUnidad.diagnostico;
-        document.getElementById('tallerValor').textContent = registroUnidad.espacio_taller;
-        document.getElementById('infoDiagnostico').style.display = 'block';
-      } else {
-        // Ocultar el div si no hay número de taller o el temporizador ha expirado
-        document.getElementById('infoDiagnostico').style.display = 'none';
-      }
-    }
-
-  // Definir la función de verificación periódica
-  function actualizarInformacionDiagnostico(registrosMasRecientes) {
   // Obtener el número de unidad de los parámetros de la URL
   const { numero_unidad } = obtenerParametrosURL();
 
   // Obtener el registro correspondiente al número de unidad
   const registroUnidad = registrosMasRecientes[numero_unidad];
 
-  // Obtener referencias a los elementos del DOM
-  const diagnosticoElement = document.getElementById('diagnosticoValor');
-  const tallerElement = document.getElementById('tallerValor');
-  const infoDiagnosticoElement = document.getElementById('infoDiagnostico');
-  const registroFormElement = document.getElementById('registroForm');
-
-  // Agregar console.log para depuración
-  //console.log('diagnostico:', registroUnidad.diagnostico);
-  //console.log('espacio_taller:', registroUnidad.espacio_taller);
-
-  // Verificar si ambos campos son null o undefined o "N/A"
-  const diagnosticoIsNull = registroUnidad.diagnostico === null || registroUnidad.diagnostico === undefined || registroUnidad.diagnostico === 'N/A';
-  const tallerIsNull = registroUnidad.espacio_taller === null || registroUnidad.espacio_taller === undefined || registroUnidad.espacio_taller === 'N/A';
-
-  // Verificar si el diagnostico es "Tiempo agotado" y espacio_taller no es "N/A"
-  const diagnosticoEsTiempoAgotado = registroUnidad.diagnostico === 'Tiempo agotado';
-  const espacioTallerEsNumero = !isNaN(registroUnidad.espacio_taller);
-
-  if ((diagnosticoIsNull && tallerIsNull) || (diagnosticoEsTiempoAgotado && espacioTallerEsNumero)) {
-      // Ambos campos son null, undefined o "N/A", o diagnostico es "Tiempo agotado" y espacio_taller es un número, ocultar "infoDiagnostico" y mostrar "registroForm"
-      infoDiagnosticoElement.style.display = 'none';
-      registroFormElement.hidden = false;
-  } else {
-      // Al menos uno de los campos no es null, undefined ni "N/A", o diagnostico no es "Tiempo agotado" o espacio_taller no es un número, mostrar "infoDiagnostico"
-      diagnosticoElement.textContent = registroUnidad.diagnostico;
-      tallerElement.textContent = registroUnidad.espacio_taller;
-      infoDiagnosticoElement.style.display = 'block';
-      registroFormElement.style.display = 'none';
+  if (registroUnidad) {
+    // Mostrar los datos solo si hay un número de taller y el temporizador está en curso
+    if (registroUnidad.espacio_taller !== 'N/A' && registroUnidad.diagnostico !== 'Tiempo agotado') {
+      document.getElementById('diagnosticoValor').textContent = registroUnidad.diagnostico;
+      document.getElementById('tallerValor').textContent = registroUnidad.espacio_taller;
+      document.getElementById('infoDiagnostico').style.display = 'block';
+    } else {
+      // Ocultar el div si no hay número de taller o el temporizador ha expirado
+      document.getElementById('infoDiagnostico').style.display = 'none';
+    }
   }
- /*else {
-    console.error('Alguno de los elementos del DOM no existe.');
-}*/
+
+  //let estadoTemporizador
+
+// Definir la función de verificación periódica
+function actualizarInformacionDiagnostico(registrosMasRecientes) {
+// Obtener el número de unidad de los parámetros de la URL
+const { numero_unidad } = obtenerParametrosURL();
+
+// Verificar si numero_unidad es nulo o indefinido
+if (numero_unidad === null || numero_unidad === undefined) {
+  // Si no se está obteniendo ningún número de unidad, ocultar "infoDiagnostico"
+  const infoDiagnosticoElement = document.getElementById('infoDiagnostico');
+  if (infoDiagnosticoElement) {
+      infoDiagnosticoElement.style.display = 'none';
+  }
+  return; // Salir de la función
+}                                                                                                                                                   
+
+// Obtener el registro correspondiente al número de unidad
+const registroUnidad = registrosMasRecientes[numero_unidad];
+
+// Verificar si el registro existe
+if (!registroUnidad) {
+  return; // Si no existe, salir de la función
+}
+
+// Obtener referencias a los elementos del DOM
+const diagnosticoElement = document.getElementById('diagnosticoValor');
+const tallerElement = document.getElementById('tallerValor');
+const infoDiagnosticoElement = document.getElementById('infoDiagnostico');
+const registroFormElement = document.getElementById('registroForm');
+
+// Verificar si ambos campos son null o undefined o "N/A"
+const diagnosticoIsNull = registroUnidad.diagnostico === null || registroUnidad.diagnostico === undefined || registroUnidad.diagnostico === 'N/A';
+const tallerIsNull = registroUnidad.espacio_taller === null || registroUnidad.espacio_taller === undefined || registroUnidad.espacio_taller === 'N/A';
+
+// Verificar si el diagnostico es "Tiempo agotado" y espacio_taller no es "N/A"
+const diagnosticoEsTiempoAgotado = registroUnidad.diagnostico === 'Tiempo agotado';
+const espacioTallerEsNumero = !isNaN(registroUnidad.espacio_taller);
+
+if ((diagnosticoIsNull && tallerIsNull) || (diagnosticoEsTiempoAgotado && espacioTallerEsNumero)) {
+    // Ambos campos son null, undefined o "N/A", o diagnostico es "Tiempo agotado" y espacio_taller es un número, ocultar "infoDiagnostico" y mostrar "registroForm"
+    infoDiagnosticoElement.style.display = 'none';
+    registroFormElement.hidden = false;
+} else {
+    // Al menos uno de los campos no es null, undefined ni "N/A", o diagnostico no es "Tiempo agotado" o espacio_taller no es un número, mostrar "infoDiagnostico"
+    if (registroUnidad.estadoTimer === 'PAUSADO') {
+      diagnosticoElement.textContent = 'TIMER EN PAUSA';
+  } else {
+      diagnosticoElement.textContent = registroUnidad.diagnostico;
+  }
+  tallerElement.textContent = registroUnidad.espacio_taller;
+  infoDiagnosticoElement.style.display = 'block';
+  registroFormElement.style.display = 'none';
+}
+
 }
 
 // Llamar a la función de verificación periódica cada 1000 milisegundos (1 segundo)
 setInterval(() => {
-  actualizarInformacionDiagnostico(registrosMasRecientes);
-}, 1000);
-  });
+actualizarInformacionDiagnostico(registrosMasRecientes);
+}, 100);
 
   const tablaAnterior = document.getElementById('tablaMovimientos');
   tablaAnterior.parentElement.removeChild(tablaAnterior);
@@ -280,9 +297,10 @@ window.mostrarHistorico = function (row) {
   const hot = new Handsontable(container, {
       data:  Object.values(registrosMasRecientes),
       columns: columns,
-      colHeaders: true, 
+      //colHeaders: true, 
       rowHeaders: true,
       manualColumnResize: true,
+      touchUI: true,
       colWidths: [100, 100, 120, 110, 90, 80, 80, 130, 150, 150, 100, 100, 370,],
       filters: true, // Habilita los filtros
       dropdownMenu: true, //['filter_by_condition', 'filter_by_value', 'filter_action_bar'], // Tipo de filtro
@@ -457,7 +475,7 @@ function crearObjetoDatos(filaActualizada) {
     fecha: filaActualizada[7], // Ajusta el índice según la posición de la columna "fecha" en tus datos
     //diferenciaHoras: minutosDiferencia,
     estado: estado,
-    cargada: transformarValorCargada(cargada),
+    cargada: cargada,
     objetivo_traslado: objetivo_traslado,
     estado_caja: estado_caja,
     comentarios_mantenimiento: comentarios_mantenimiento,
@@ -557,20 +575,90 @@ if (datos) {
 });
 
 // Define variables para almacenar la fecha de pausa y la duración del temporizador
-/*let fechaPausa;
+let fechaPausa;
 let duracionTimer = 0; // Duración inicial del temporizador (en segundos)
+let idTimer;
 
-// Agrega eventos de escucha a los botones
-document.getElementById('pausar').addEventListener('click', function () {
-    // Pausar el temporizador
-    fechaPausa = new Date();
-    console.log('Temporizador pausado en: ' + fechaPausa);
+  // Obtener el ID de la unidad de los parámetros de la URL
+  const parametrosURL = obtenerParametrosURL();
+  const idUnidad = parametrosURL.id;
+  
+  console.log('idUnidad:', idUnidad);
+  // Realizar una solicitud GET para obtener el id_timer
+  fetch('https://quintaapp.com.mx:3008/timer/' + idUnidad)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error en la solicitud' + response.status);
+      }
+      return response.json();
+    })
+    .then(data => {
+      //console.log('Response data:', data);
+      // Procesar los datos obtenidos, en este caso, almacenar el id_timer
+      idTimer = data._id;
+      estadoTimer = data.estado;
+  
+      console.log('idTimer:', idTimer);
+
+      // Agrega eventos de escucha a los botones
+  document.getElementById('pausar').addEventListener('click', function () {
+      
+    fechaPausa = moment().format('YYYY-MM-DDTHH:mm:ss'); // Obtener la fecha actual con moment
+
+    // Ocultar "diagnosticoValor"
+    document.getElementById('diagnosticoValor').style.display = 'none';
+
+    // Restablecer estadoTimer a 'PAUSADO' después de pausar
+    estadoTimer = 'PAUSADO';
+
+    // Cambiar el contenido de la etiqueta span
+    document.getElementById('diagnosticoValor').textContent = 'TIMER EN PAUSA';
+
+    // Crear una nueva etiqueta span para "TIMER EN PAUSA"
+    const spanPausa = document.createElement('span');
+    spanPausa.id = 'timerEnPausa';
+    spanPausa.textContent = 'TIMER EN PAUSA';
+
+    // Insertar la nueva etiqueta span antes de diagnosticoValor
+    document.getElementById('diagnosticoValor').parentNode.insertBefore(spanPausa, document.getElementById('diagnosticoValor'));
+
+    // Almacenar el estado en localStorage
+    localStorage.setItem('timerEnPausa', 'true');
+    
+    console.log('Timer: ' + idTimer + 'Fecha: ' + fechaPausa);
+
+    // Realizar solicitud al servidor al pausar
+    fetch('https://quintaapp.com.mx:3008/timer/pausar', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            id_timer: idTimer,
+            fecha: fechaPausa, // Enviar la fecha de pausa al servidor
+            // Otros datos que puedas necesitar enviar al servidor
+        }),
+    })
+    .then(response => response.json())
+    .then(data => {
+      // Verificar el estado del temporizador en la respuesta del servidor
+      console.log('Estado del temporizador en la respuesta:', estadoTimer);
+
+      if (data.estadoTimer === 'PAUSADO') {
+        //Ocultar la etiqueta original
+            document.getElementById('diagnosticoValor').style.display = 'none';
+    }
+    window.location.reload();
+    })
+    .catch(error => {
+        console.error('Error al pausar el temporizador:', error);
+    });
 });
 
 document.getElementById('reanudar').addEventListener('click', function () {
     // Reanudar el temporizador
-    if (fechaPausa) {
-        const fechaReanudar = new Date();
+    if (fechaPausa, estadoTimer) {
+        const fechaReanudar = moment().format('YYYY-MM-DDTHH:mm:ss'); // Obtener la fecha actual con moment
         const tiempoTranscurrido = (fechaReanudar - fechaPausa) / 1000; // Diferencia en segundos
 
         // Sumar el tiempo transcurrido al temporizador
@@ -591,13 +679,77 @@ document.getElementById('reanudar').addEventListener('click', function () {
         const fechaFin = new Date();
         fechaFin.setSeconds(fechaFin.getSeconds() + tiempoRestante);
         console.log('Nueva fecha de finalización: ' + fechaFin);
+
+        // Realizar solicitud al servidor al reanudar
+        fetch('https://quintaapp.com.mx:3008/timer/reanudar', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                id_timer: idTimer,
+                fecha: fechaReanudar, // Enviar la fecha de reanudar al servidor
+                //tiempoRestante: tiempoRestante, // Enviar el nuevo tiempo restante al servidor
+                // Otros datos que puedas necesitar enviar al servidor
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            // Manejar la respuesta del servidor si es necesario
+            console.log('Respuesta del servidor al reanudar:', estadoTimer);
+
+            // Verificar el estado del temporizador en la respuesta del servidor
+        if (data.estadoTimer === 'PAUSADO') {
+           // Eliminar la etiqueta span "timerEnPausa"
+           const timerEnPausaElement = document.getElementById('timerEnPausa');
+           if (timerEnPausaElement) {
+               timerEnPausaElement.parentNode.removeChild(timerEnPausaElement);
+           }
+
+           // Mostrar "diagnosticoValor"
+           document.getElementById('diagnosticoValor').style.display = 'block';
+       }
+
+       // Eliminar la variable timerEnPausa del localStorage
+       localStorage.removeItem('timerEnPausa');
+
+       window.location.reload();
+
+        })
+        .catch(error => {
+            console.error('Error al reanudar el temporizador:', error);
+        });
     } else {
         console.log('Error: No se ha pausado el temporizador previamente.');
     }
-});*/
-
+});
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
+  
+    // Definir la función que configurará los eventos de los botones con el id_timer
+  /*function iniciarEventos(idTimer, estadoTimer) {
+  
+  }*/
 
 document.addEventListener('DOMContentLoaded', function () {
+
+  const timerEnPausa = localStorage.getItem('timerEnPausa');
+
+    if (timerEnPausa === 'true') {
+        // Ocultar la etiqueta original
+        document.getElementById('diagnosticoValor').style.display = 'none';
+
+        // Crear una nueva etiqueta span para "TIMER EN PAUSA"
+        const spanPausa = document.createElement('span');
+        spanPausa.id = 'timerEnPausa';
+        spanPausa.textContent = 'TIMER EN PAUSA';
+
+        // Insertar la nueva etiqueta span antes de diagnosticoValor
+        document.getElementById('diagnosticoValor').parentNode.insertBefore(spanPausa, document.getElementById('diagnosticoValor'));
+    }
+
     // Llamar a obtenerMovimientosCajas al cargar la página
     obtenerMovimientosCajas();
 
@@ -728,17 +880,29 @@ document.addEventListener('DOMContentLoaded', function () {
     }).then((result) => {
         if (result.isConfirmed) {
             // Obtener el valor del diagnóstico desde el input
-            //const diagnosticoInput = document.getElementById('diagnostico');
-            //const diagnostico = diagnosticoInput ? parseInt(diagnosticoInput.value) : null;
+            const diagnosticoInput = document.getElementById('diagnostico');
+            const diagnostico = diagnosticoInput ? parseInt(diagnosticoInput.value) : null;
+            // Obtener el ID del número de unidad
+            const urlParams = new URLSearchParams(window.location.search);
+            const id_unidad = urlParams.get('id');
+
+            // Obtener el valor de estadoCaja2 y estadoCajaFinal
+            const estadoCaja2 = document.querySelector('input[name="estadoCaja2"]:checked').value;
+            const comentariosDiv = document.getElementById('comentariosDiv');
+            const comentarios = comentariosDiv.style.display === 'block' ? document.getElementById('comentarios').value : '';
+            const estadoCajaFinal = estadoCaja2 === 'Necesita Mantenimiento' && comentarios ? `Comentarios: ${comentarios}` : estadoCaja2;
 
             let url = 'https://quintaapp.com.mx:3008/cajas/modificar-taller';
             // Crear un objeto de datos que se enviará en la solicitud POST
             let data = {
+                "id_caja": id_unidad, // Agregar el ID de la unidad al objeto de datos
                 "numero_unidad": numero_unidad,
                 "espacio_taller": espacio_taller,
                 "fecha_envio_taller": moment().format(),
-                //"diagnostico": diagnostico, // Agregar el diagnóstico al objeto de datos
-            };
+                "diagnostico": diagnostico, // Agregar el diagnóstico al objeto de datos
+                "estado_caja": estadoCaja2, // Agregar estadoCaja2 al objeto de datos
+                "comentarios_mantenimiento": estadoCajaFinal, // Agregar estadoCajaFinal al objeto de datos
+            };  
 
             fetch(url, {
                 method: 'POST',
