@@ -105,7 +105,10 @@
                     <!-- Agregar este div donde quieras mostrar los datos -->
                     <div id="infoDiagnostico" style="display: none;" class="infoDiagnostico">
                         <div class="formTimer">
-                            <p><b>Diagnóstico:</b> <span id="diagnosticoValor"></span></p>
+                            <!-- Agregar la etiqueta span para el TIMER EN PAUSA -->
+                            <span id="timerEnPausa" style="display: none; color: red;">TIMER EN PAUSA</span>
+                            <!--<span id="timerFinalizado" style="display: none; color:darkgreen">TIMER FINALIZADO</span>-->
+                            <p id="infoTimer"><b>Diagnóstico:</b> <span id="diagnosticoValor"></span></p>
                             <p><b>Taller:</b> <span id="tallerValor"></span></p>
                         </div>
                         <div class="divBtnsTimer">
@@ -114,11 +117,11 @@
                             <button type="button" id="finalizar" style="margin: 3px">Finalizar</button>
                         </div>
                     </div>
-                    <div class="divBtns">
+                    <div id="divBtns" class="divBtns">
                         <button type="button" id="limpiarFiltros" style="margin: 3px" class="btnFiltros">Limpiar Filtros</button>
                         <button type="button" id="editar" style="margin: 3px" class="btnEditar">Editar</button>
                     </div>
-                <div class="table-container">
+                <div id="remolques" class="table-container">
                     <div id="tabla2" style="margin: 10px"></div>
                 </div>
         </form><br>
