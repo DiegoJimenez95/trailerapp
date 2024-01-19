@@ -406,15 +406,6 @@ const timerEnPausaElement = document.getElementById('timerEnPausa');
 const infoTimerElement = document.getElementById('infoTimer');
 const remolquesElement = document.getElementById('remolques');
 const divBtnsElement = document.getElementById('divBtns');
-//const timerFinalizado = document.getElementById('timerFinalizado');
-
-// Verificar si el tiempo restante es menor o igual a cero
-/*if (tiempoRestante <= 0) {
-  // Mostrar el div "registroForm" y ocultar el div "infoDiagnostico"
-  infoDiagnosticoElement.style.display = 'none';
-  registroFormElement.hidden = false;
-  return; // Salir de la función porque ya hemos actualizado la visualización
-}*/
 
 // Verificar el estado del temporizador
 if (estadoTimer === 'PAUSADO') {
@@ -425,14 +416,7 @@ if (estadoTimer === 'PAUSADO') {
   // Si el temporizador está reanudado, mostrar "infoTimer" y ocultar "timerEnPausa"
   infoTimerElement.style.display = 'block';
   timerEnPausaElement.style.display = 'none';
-} /*else if (estadoTimer === null) {
-  // Si el temporizador está finalizado, ocultar "infoDiagnostico" y mostrar "registroForm"
-  infoDiagnosticoElement.style.display = 'none';
-  registroFormElement.hidden = false;
-  //remolquesElement.style.display = 'block';
-  //divBtnsElement.style.display = 'block';
-  return; // Salir de la función porque ya hemos actualizado la visualización
-}*/
+} 
 
 // Verificar el estado del temporizador
 if (estadoTimer === 'PAUSADO' || estadoTimer === 'REANUDADO' || estadoTimer === 'INICIADO') {
@@ -471,7 +455,7 @@ if ((diagnosticoIsNull && tallerIsNull) || (diagnosticoEsTiempoAgotado && espaci
     registroFormElement.hidden = false;
 }  else {
   // Al menos uno de los campos no es null ni "N/A", o diagnostico no es "Tiempo agotado" o espacio_taller no es un número, mostrar "infoDiagnostico"
-  const horasRestantes = Math.floor((tiempoRestante / 3600));
+  const horasRestantes = Math.floor(tiempoRestante / 3600);
   const minutosRestantes = Math.floor((tiempoRestante % 3600) / 60);
   diagnosticoElement.textContent = `${horasRestantes} hora(s) ${minutosRestantes} minuto(s)`;
   console.log(`Tiempo restante final: ${horasRestantes} horas ${minutosRestantes} minutos`);
@@ -593,33 +577,6 @@ window.mostrarHistorico = function (row) {
     
         // Muestra el valor almacenado en 'diagnóstico'
         td.innerHTML = value;
-
-        // Obtener el estado del temporizador y el tiempo restante
-        /*const estadoTimer = datum.estadoTimer; // Ajusta según la estructura real de tus datos
-        const tiempoRestante = datum.tiempoRestante; // Ajusta según la estructura real de tus datos
-
-        console.log('Estado del temporizador:', estadoTimer);
-        console.log('Tiempo restante:', tiempoRestante);
-
-        if (estadoTimer === 'PAUSADO') {
-          // Si el temporizador está pausado, mostrar "TIMER EN PAUSA" en rojo
-          td.textContent = 'TIMER EN PAUSA';
-          td.style.color = 'red';
-        } else if (estadoTimer === 'REANUDADO' || estadoTimer === 'INICIADO') {
-          // Si el temporizador está reanudado o iniciado, mostrar el tiempo restante en amarillo
-          const horasRestantes = Math.floor(tiempoRestante / 3600);
-          const minutosRestantes = Math.floor((tiempoRestante % 3600) / 60);
-          td.textContent = `${horasRestantes} hora(s) ${minutosRestantes} minuto(s)`;
-          td.style.color = 'yellow';
-        } else if (estadoTimer === 'FINALIZADO' || estadoTimer === null) {
-          // Si el temporizador está finalizado o es null, mostrar "TIMER FINALIZADO" en verde
-          td.textContent = 'TIMER FINALIZADO';
-          td.style.color = 'green';
-        } else {
-          // Si el tiempo del temporizador se terminó, mostrar "Tiempo agotado" en rojo
-          td.textContent = 'Tiempo agotado';
-          td.style.color = 'red';
-        }*/
        
         };
       }
