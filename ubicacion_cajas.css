@@ -443,7 +443,7 @@ select::-ms-expand {
 
 /* Estilo base para la tabla */
 #tabla2 {
-  width: 90vw;
+  width: 95vw;
   height: 100vh;
   overflow-x: auto;
 }

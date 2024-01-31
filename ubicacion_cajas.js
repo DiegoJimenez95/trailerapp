@@ -1,6 +1,8 @@
 let hot_global;
 
 let numero_fila;
+// Define una variable para almacenar el _id obtenido de la consulta de estado
+let idObtenido;
 
 function obtenerParametrosURL() {
     const urlParams = new URLSearchParams(window.location.search);
@@ -70,6 +72,7 @@ function obtenerMovimientosCajas() {
         
         // Llamar a una función para actualizar la tabla con los datos
         actualizarTabla(data);
+
       })
       .catch(error => {
         console.error('Error:', error);
@@ -81,10 +84,16 @@ let fechaPausa;
 let idTimer;
 let estadoTimer;
 let tiempoRestante;
+let tallerSeleccionado;
+let idCajaTimer;
 
 function actualizarTabla(data) {
   const tabla = document.getElementById('tablaMovimientos');
   const tbody = tabla.querySelector('tbody');
+
+  // Obtener el número de unidad de los parámetros de la URL
+  const parametrosURL = obtenerParametrosURL();
+  const numero_unidad = parametrosURL.numero_unidad;
 
   // Limpiar el contenido existente de la tabla
   tbody.innerHTML = '';
@@ -124,6 +133,17 @@ function actualizarTabla(data) {
     const minutosDiferencia = fechaActual.diff(fechaMovimiento, 'minutes');
     movimiento.diferenciaHoras = minutosDiferencia;
 
+    // Verificar si el número de unidad coincide con el de la URL
+    /*if (numero_unidad !== null && movimiento.numero_unidad === numero_unidad) {
+      // Mostrar SweetAlert2 con el estado de la caja al cargar la página
+      const estadoCaja = movimiento.estado_caja === 'Bueno' ? 'Bueno' : 'Necesita Mantenimiento';
+      Swal.fire({
+        title: 'Estado de la Caja',
+        text: `La caja con número ${numero_unidad} está en estado: ${estadoCaja}`,
+        icon: 'info',
+      });
+    }*/
+
     const fechaTaller = moment(movimiento.fecha_envio_taller);
     const diferenciaHorasTaller = fechaActual.diff(fechaTaller, 'minutes');
     movimiento.diferenciaHorasTaller = diferenciaHorasTaller;
@@ -139,7 +159,8 @@ function actualizarTabla(data) {
     movimiento.cargada === 3 ? 'Dedicada' :
     'Vacia';
 
-  movimiento.estado_caja = movimiento.estado_caja === 'Bueno' ? 'Bueno' : 'Necesita Mantenimiento';
+  //movimiento.estado_caja = movimiento.estado_caja === 'Bueno' || movimiento.estado_caja === 'BUENO' ? 'Bueno' : 'Necesita Mantenimiento';
+  movimiento.estado_caja = movimiento.estado_caja.toUpperCase() === 'BUENO' ? 'Bueno' : 'Necesita Mantenimiento';
     // Verificar si ya tenemos un registro para esta unidad
     if (registrosMasRecientes[numeroUnidad]) {
       // Comprobar si el registro actual es más reciente que el almacenado
@@ -155,11 +176,32 @@ function actualizarTabla(data) {
       registrosMasRecientes[numeroUnidad] = movimiento;
     }
 
-    // Calcular el valor de 'diagnostico' y almacenarlo en los datos
-    const horasDiagnostico = movimiento.diagnostico;
-    const segundosRestantes = horasDiagnostico * 3600 - movimiento.diferenciaHorasTaller * 60;
+    // Validar que diagnostico no sea null ni undefined antes de asignar el valor
+    if (movimiento.diagnostico !== null && movimiento.diagnostico !== undefined) {
+      movimiento.diagnostico = `${movimiento.diagnostico} hora(s)`;
+    }
 
-    if (movimiento.espacio_taller != 'N/A' && movimiento.espacio_taller != null) {
+    if (movimiento.numero_unidad === numero_unidad) {
+      tallerSeleccionado = movimiento.espacio_taller;
+    }
+
+    //Guardar el _id correspondiente al número de unidad
+    if (movimiento.numero_unidad === numero_unidad) {
+      idObtenido = movimiento._id; // Guardar el _id
+    }
+    //console.log('_id caja:', idObtenido);
+
+    //tallerSeleccionado = movimiento.espacio_taller;
+    //console.log('Taller Seleccionado: ', tallerSeleccionado);
+
+    // Eliminar la lógica relacionada con segundosRestantes
+    //movimiento.diagnostico = `${movimiento.diagnostico} hora(s)`;
+
+    // Calcular el valor de 'diagnostico' y almacenarlo en los datos
+    //const horasDiagnostico = movimiento.diagnostico;
+    //const segundosRestantes = horasDiagnostico * 3600 - movimiento.diferenciaHorasTaller * 60;
+
+    /*if (movimiento.espacio_taller != 'N/A' && movimiento.espacio_taller != null) {
 
       if (segundosRestantes > 0) {
         const horas = Math.floor(segundosRestantes / 3600);
@@ -173,12 +215,14 @@ function actualizarTabla(data) {
     } else if (movimiento.diagnostico != null) {
       movimiento.diagnostico_str =  movimiento.diagnostico + ' hora(s)';
       // movimiento.diagnostico = movimiento.diagnostico + ' hora(s)' //se cambio esto
-    }
-    
+    }*/
+
+    // Después de actualizar la tabla, llamar a mostrarEstadoCaja para actualizar SweetAlert2
+    //mostrarEstadoCaja(data);
   });
 
   // Obtener el número de unidad de los parámetros de la URL
-  const { numero_unidad } = obtenerParametrosURL();
+  //const { numero_unidad } = obtenerParametrosURL();
 
   // Obtener el registro correspondiente al número de unidad
   const registroUnidad = registrosMasRecientes[numero_unidad];
@@ -196,7 +240,7 @@ function actualizarTabla(data) {
   }
 
   // Obtener el ID de la unidad de los parámetros de la URL
-  const parametrosURL = obtenerParametrosURL();
+  //const parametrosURL = obtenerParametrosURL();
   const idUnidad = parametrosURL.id;
   // Realizar una solicitud GET para obtener el id_timer
   console.log('idUnidad:', idUnidad);
@@ -214,8 +258,11 @@ function actualizarTabla(data) {
       // Procesar los datos obtenidos solo si data no es null ni undefined
     idTimer = data._id;
     estadoTimer = data.estado;
+    idCajaTimer = data.id_caja;
     //console.log('Timer data:', data);
     console.log('idTimer:', idTimer);
+    //console.log('idCaja:', idCaja);
+    //console.log('Numero Caja:', numeroCaja);
     console.log('Estado del temporizador:', estadoTimer);
 
     // Obtener la unidad específica según el dato "caja" del timer
@@ -345,18 +392,44 @@ function reanudarTemporizador() {
 
 // Función para finalizar el temporizador
 function finalizarTemporizador() {
+  //Fecha de finalizacion
+  const fechaFinalizar = moment().format('YYYY-MM-DDTHH:mm:ss');
+
   //Verificar si el tiempoRestante es mayor que cero
   const finalizoATiempo = tiempoRestante > 0;
 
+  // Obtener el número de unidad de los parámetros de la URL
+  const parametrosURL = obtenerParametrosURL();
+  const numero_unidad = parametrosURL.numero_unidad; // Ajusta según la estructura real de tus datos
+  //const idUnidad = parametrosURL.id;
+
+  // Obtener el registro correspondiente al número de unidad
+  const registroUnidad = registrosMasRecientes[numero_unidad];
+
+  if (registroUnidad) {
+
+    // Obtener el número de taller seleccionado para la unidad actual
+    tallerSeleccionado = registroUnidad.espacio_taller;
+
+    //Obtener _id para la unidad actual
+    idObtenido = registroUnidad._id;
+
+    // Calcular las horas que sobraron del tiempoRestante
+    const horasSobrantes = Math.floor(tiempoRestante / 3600);
+
   // Realizar solicitud al servidor al finalizar
-  return fetch('https://quintaapp.com.mx:3008/timer/finalizar/' + idTimer, {
+  fetch('https://quintaapp.com.mx:3008/timer/finalizar/' + idTimer, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
     body: JSON.stringify({
-      id_timer: idTimer,
-      finalizo_a_tiempo: finalizoATiempo,
+      id_estado_unidad: idObtenido,
+      fecha_finalizado: fechaFinalizar,
+      cumplimiento: finalizoATiempo,
+      taller: tallerSeleccionado,
+      horas_sobra_adicionales: horasSobrantes,
+      horas_diagnostico: registroUnidad.diagnostico,
       //fecha: fechaPausa, // Enviar la fecha de pausa al servidor
       // Otros datos que puedas necesitar enviar al servidor
     }),
@@ -364,14 +437,21 @@ function finalizarTemporizador() {
     .then(response => response.json())
     .then(data => {
       // Verificar el estado del temporizador en la respuesta del servidor
-      console.log('Estado del temporizador en la respuesta:', estadoTimer);
+      console.log('ID Estado unidad:', idObtenido);
+      console.log('Fecha de finalizacion:', fechaFinalizar);
       console.log('El temporizador finalizó a tiempo:', finalizoATiempo);
+      console.log('Número de taller seleccionado:', tallerSeleccionado);
+      console.log('Horas que sobraron:', horasSobrantes);
+      console.log('Horas Diagnostico:', registroUnidad.diagnostico);
 
-      //window.location.reload();
+      window.location.reload();
     })
     .catch(error => {
       console.error('Error al finalizar el temporizador:', error);
     });
+  } else {
+    console.error('No se encontró un registro correspondiente a la unidad específica.');
+  }
 }
 
 // Definir la función de verificación periódica
@@ -481,22 +561,51 @@ setInterval(() => {
 
     // Define las columnas de la tabla Handsontable
     const columns = [
-        { data: '_id', title: '_id', readOnly: true, },
-        { data: 'sucursal', title: 'Sucursal', readOnly: false, },
-        { data: 'numero_unidad', title: 'Número Unidad', readOnly: true, },
-        { data: 'historico', title: 'Historico', readOnly: true, renderer: function (instance, td, row, col, prop, value, cellProperties) {
+        { data: '_id', title: '_id', readOnly: true, },//0
+        { data: 'id_unidad' , title: 'id_unidad', readOnly: true, },//1
+        { data: 'sucursal', title: 'Sucursal', readOnly: false, },//2
+        { data: 'numero_unidad', title: 'Número Unidad', readOnly: true, },//3
+        { data: 'historico', title: 'Historico', readOnly: true, renderer: function (instance, td, row, col, prop, value, cellProperties) {//4
           td.innerHTML = '<button type="button" class="btn-historico" onclick="mostrarHistorico(' + row + ')">Ver Histórico</button>';
       },
   },
-        { data: 'estado', title: 'Ubicacion', readOnly: false, },
-        { data: 'cargada', title: 'Estatus', readOnly: false, },
-        { data: 'objetivo_traslado', title: 'Destino', readOnly: false, },
-        { data: 'fecha', title: 'Fecha', readOnly: true, },
-        { data: 'diferenciaHoras', title: 'Ultimo Escaneo', readOnly: true, },
-        { data: 'estado_caja', title: 'Estado Caja', readOnly: false, },
-        { data: 'diagnostico', title: 'Diagnostico', readOnly: true, },
-        { data: 'espacio_taller', title: 'Taller', readOnly: true, },
-        { data: 'comentarios_mantenimiento', title: 'Comentarios Mantenimiento', readOnly: false, },
+        { data: 'estado', title: 'Ubicacion', readOnly: false, },//5
+        { data: 'cargada', title: 'Estatus', readOnly: false, },//6
+        { data: 'objetivo_traslado', title: 'Destino', readOnly: false, },//7
+        { data: 'fecha', title: 'Fecha', readOnly: true, },//8
+        { data: 'diferenciaHoras', title: 'Ultimo Escaneo', readOnly: true, },//9
+        { data: 'estado_caja', title: 'Estado Caja', readOnly: false, },//10
+        { data: 'diagnostico', title: 'Diagnostico', readOnly: true, },//11
+        { data: 'espacio_taller', title: 'Taller', readOnly: true, },//12
+        {
+          data: 'historico_taller',
+          title: 'Historico Taller',
+          readOnly: true,
+          renderer: function (instance, td, row, col, prop, value, cellProperties) {
+            // Crear un botón en la celda
+            const botonHistoricoTaller = document.createElement('button');
+            botonHistoricoTaller.innerText = 'Histórico Taller';
+            botonHistoricoTaller.type = 'button'; // Cambia el tipo de botón a 'button'
+            botonHistoricoTaller.classList.add('btn-historico-taller');
+
+            // Asignar un evento de clic al botón
+            botonHistoricoTaller.addEventListener('click', function () {
+                // Obtener el _id y numero_unidad de la fila actual
+                const idUnidad = hot.getDataAtRowProp(row, 'id_unidad');
+                const numeroUnidad = hot.getDataAtRowProp(row, 'numero_unidad');
+
+                // Llamar a la función para abrir la nueva página con el histórico del taller
+                abrirPaginaHistoricoTaller(idUnidad, numeroUnidad);
+            
+            });
+            // Limpiar el contenido existente de la celda
+            td.innerHTML = '';
+
+            // Agregar el botón a la celda
+            td.appendChild(botonHistoricoTaller);
+          },
+        },
+        { data: 'comentarios_mantenimiento', title: 'Comentarios Mantenimiento', readOnly: false, },//14
         // ... Otras columnas ...
     ];
     
@@ -518,12 +627,12 @@ window.mostrarHistorico = function (row) {
       rowHeaders: true,
       manualColumnResize: true,
       //touchUI: true,
-      colWidths: [100, 100, 120, 110, 90, 80, 80, 130, 150, 150, 100, 100, 370,],
+      colWidths: [100, 100, 100, 120, 110, 90, 80, 80, 130, 150, 150, 100, 100, 120, 370],
       filters: true, // Habilita los filtros
-      dropdownMenu: true, //['filter_by_condition', 'filter_by_value', 'filter_action_bar'], // Tipo de filtro
+      dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'], // Tipo de filtro
       licenseKey: 'non-commercial-and-evaluation',
       hiddenColumns: {
-        columns: [0],
+        columns: [0, 1],
       },
       afterChange: function (change, source) {
         if (source === 'edit') {
@@ -558,7 +667,7 @@ window.mostrarHistorico = function (row) {
               const fecha = moment(value).format('YYYY-MM-DDTHH:mm:ss');
               td.innerHTML = fecha;
           };
-      } else if (col === columns.findIndex(col => col.data === 'diagnostico')) {
+      } /*else if (col === columns.findIndex(col => col.data === 'diagnostico')) {
         cellProperties.renderer = function (instance, td, row, col, prop, value, cellProperties) {
           const data = instance.getSourceData();
           const datum = data[row];
@@ -579,7 +688,7 @@ window.mostrarHistorico = function (row) {
         td.innerHTML = value;
        
         };
-      }
+      }*/
         return cellProperties;
       },
   });
@@ -590,6 +699,15 @@ window.mostrarHistorico = function (row) {
 
 
   hot_global = hot;
+
+  // Función para abrir la nueva página con el histórico del taller
+function abrirPaginaHistoricoTaller(idUnidad, numeroUnidad) {
+  // Construir la URL de la nueva página con los parámetros id y numero_unidad
+  const nuevaPaginaURL = 'https://quintaapp.com.mx:3001/trailerapp/historico_taller.html?id_unidad=' + idUnidad + '&numero_unidad=' + numeroUnidad;
+
+  // Abrir la nueva página en una nueva pestaña o ventana
+  window.open(nuevaPaginaURL, '_blank');
+}
 
   function abrirVentanaModal(numeroUnidad) {
     // Hacer una solicitud al servidor para obtener el histórico
@@ -652,12 +770,12 @@ function crearObjetoDatos(filaActualizada) {
   // Aquí puedes construir el objeto de datos con la información necesaria
 
   // Obtén los valores de las columnas
-  const sucursal = filaActualizada[1];
-  const estado = filaActualizada[4];
-  const cargada = filaActualizada[5];
-  const objetivo_traslado = filaActualizada[6];
-  const estado_caja = filaActualizada[9];
-  const comentarios_mantenimiento = filaActualizada[12];
+  const sucursal = filaActualizada[2];
+  const estado = filaActualizada[5];
+  const cargada = filaActualizada[6];
+  const objetivo_traslado = filaActualizada[7];
+  const estado_caja = filaActualizada[10];
+  const comentarios_mantenimiento = filaActualizada[14];
 
   // Define las reglas de validación
   const reglaSucursal = /^(Queretaro|Nuevo Laredo|Mexico|Laredo, Texas)$/;
@@ -689,7 +807,7 @@ function crearObjetoDatos(filaActualizada) {
   const datos = {
     _id: filaActualizada[0],
     sucursal: sucursal,
-    fecha: filaActualizada[7], // Ajusta el índice según la posición de la columna "fecha" en tus datos
+    fecha: filaActualizada[8], // Ajusta el índice según la posición de la columna "fecha" en tus datos
     //diferenciaHoras: minutosDiferencia,
     estado: estado,
     cargada: cargada,
@@ -1021,7 +1139,6 @@ document.addEventListener('DOMContentLoaded', function () {
           comentarios_mantenimiento: estadoCajaFinal,
           objetivo_traslado: estadoCaja3,
       };
-      //console.log(datos);
       enviarDatos('https://quintaapp.com.mx:3008/cajas/guardar-estado', datos, 'sale');
   });
 

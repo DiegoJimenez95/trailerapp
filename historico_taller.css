@@ -1,0 +1,37 @@
+body {
+    background: #E5EEFF;
+    color: #787b8b;
+}
+
+.titulo_taller {
+    font-family: 'Open Sans', sans-serif;
+    color: #19255B;
+    font-size: 30px;
+    display: grid;
+    place-items: center;
+}
+
+.noUnidad{
+    font-family: 'Open Sans', sans-serif;
+    color: #19255B;
+    font-size: 20px;
+    justify-content: center;
+    display: flex;
+}
+
+/* Estilo base para la tabla */
+.tabla_taller {
+    width: 90vw;
+    height: 90vh;
+    overflow-x: auto;
+    place-items: center;
+    display: grid;
+  }
+  
+  /* Estilos específicos para tamaños de pantalla más pequeños */
+  @media only screen and (max-width: 600px) {
+    .tabla_taller {
+        font-size: 12px; /* Ajusta el tamaño de fuente para pantallas pequeñas */
+        /* Añade cualquier otro estilo necesario para pantallas pequeñas */
+    }
+  }
