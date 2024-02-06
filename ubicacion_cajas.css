@@ -467,7 +467,15 @@ select::-ms-expand {
 .divBtns {
   display: flex;
   width: 65vw;
-  justify-items: left;
+}
+
+/*.divBtns {
+  width: 100px;
+}*/
+
+#historicoIsla {
+  position: absolute;
+  right: 19%;
 }
 
 .divBtnsTimer {

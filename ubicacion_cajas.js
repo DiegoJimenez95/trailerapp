@@ -134,15 +134,15 @@ function actualizarTabla(data) {
     movimiento.diferenciaHoras = minutosDiferencia;
 
     // Verificar si el número de unidad coincide con el de la URL
-    /*if (numero_unidad !== null && movimiento.numero_unidad === numero_unidad) {
+    if (numero_unidad !== null && movimiento.numero_unidad === numero_unidad) {
       // Mostrar SweetAlert2 con el estado de la caja al cargar la página
-      const estadoCaja = movimiento.estado_caja === 'Bueno' ? 'Bueno' : 'Necesita Mantenimiento';
+      const estadoCaja = movimiento.estado_caja.toUpperCase() === 'BUENO' ? 'Bueno' : 'Necesita Mantenimiento';
       Swal.fire({
         title: 'Estado de la Caja',
         text: `La caja con número ${numero_unidad} está en estado: ${estadoCaja}`,
         icon: 'info',
       });
-    }*/
+    }
 
     const fechaTaller = moment(movimiento.fecha_envio_taller);
     const diferenciaHorasTaller = fechaActual.diff(fechaTaller, 'minutes');
@@ -221,8 +221,14 @@ function actualizarTabla(data) {
     //mostrarEstadoCaja(data);
   });
 
-  // Obtener el número de unidad de los parámetros de la URL
-  //const { numero_unidad } = obtenerParametrosURL();
+  document.getElementById('historicoIsla').addEventListener('click', function () {
+
+    // Construir la URL de la nueva página
+    const nuevaPaginaURL = 'https://quintaapp.com.mx:3001/trailerapp/historico_isla.html';
+
+    // Abrir la nueva página en una nueva pestaña o ventana
+    window.open(nuevaPaginaURL, '_blank');
+});
 
   // Obtener el registro correspondiente al número de unidad
   const registroUnidad = registrosMasRecientes[numero_unidad];
@@ -259,10 +265,8 @@ function actualizarTabla(data) {
     idTimer = data._id;
     estadoTimer = data.estado;
     idCajaTimer = data.id_caja;
-    //console.log('Timer data:', data);
     console.log('idTimer:', idTimer);
-    //console.log('idCaja:', idCaja);
-    //console.log('Numero Caja:', numeroCaja);
+  
     console.log('Estado del temporizador:', estadoTimer);
 
     // Obtener la unidad específica según el dato "caja" del timer
@@ -430,7 +434,6 @@ function finalizarTemporizador() {
       taller: tallerSeleccionado,
       horas_sobra_adicionales: horasSobrantes,
       horas_diagnostico: registroUnidad.diagnostico,
-      //fecha: fechaPausa, // Enviar la fecha de pausa al servidor
       // Otros datos que puedas necesitar enviar al servidor
     }),
   })
