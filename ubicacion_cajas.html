@@ -7,6 +7,29 @@
     <link rel="stylesheet" href="ubicacion_cajas.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/handsontable/dist/handsontable.full.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.3.3/dist/sweetalert2.min.css">
+    <style>
+        body {
+            background-image: url('./img/caja.jpg'); /* Reemplaza 'ruta/de/tu/imagen.jpg' con la ruta de tu imagen */
+            background-size: cover; /* Ajusta el tamaño de la imagen al tamaño del contenedor */
+            background-position: center; /* Centra la imagen */
+            background-repeat: no-repeat; /* Evita la repetición de la imagen */
+            background-color: rgba(30, 54, 95, 0.7); /* Cambia el color de fondo, utiliza rgba para especificar un color con transparencia */
+            background-blend-mode: overlay; /* Cambia el modo de mezcla para superponer el color de fondo con la imagen */
+            min-height: 100vh;
+        }
+
+        .logoQuintaApp{
+            position: absolute; /* Posición absoluta para el contenedor de la imagen */
+            top: 2px; /* Ajusta la distancia desde la parte superior */
+            right: 5px; /* Ajusta la distancia desde la derecha */
+            width: 130px; /* Ancho de la imagen */
+            height: 40px; /* Alto de la imagen */
+            background-image: url('./img/QuintaAppLogo.png'); /* Imagen de la esquina superior derecha */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+    </style>
 </head>
     <body>
         <form class="form">
@@ -43,10 +66,15 @@
                                     Dedicada
                                     <span class="checkmark"></span>
                                 </label>
+                                <label class="radio">
+                                    <input type="radio" name="estadoCaja" value="4" style="margin: 10px">
+                                    Rentada
+                                    <span class="checkmark"></span>
+                                </label>
                             </div>
                             <div class="radio-buttons2"><p class="edoCaja2"><b>Estado Caja: </b></p>
                                 <label class="radio2" style="margin: 0px">
-                                    <input type="radio" name="estadoCaja2" value="Bueno" style="margin: 10px" checked="checked2">
+                                    <input type="radio" name="estadoCaja2" value="Bueno" style="margin: 10px">
                                     Bueno
                                     <span class="checkmark2"></span>
                                 </label>
@@ -95,6 +123,11 @@
                                     Importación
                                     <span class="checkmark3"></span>
                                 </label>
+                                <label class="radio3">
+                                    <input type="radio" name="estadoCaja3" value="Dedicada" style="margin: 10px">
+                                    Dedicada
+                                    <span class="checkmark3"></span>
+                                </label>
                             </div>
                         </div>
                         <div class="btn">
@@ -118,13 +151,25 @@
                         </div>
                     </div>
                     <div id="divBtns" class="divBtns">
-                        <button type="button" id="limpiarFiltros" style="margin: 3px" class="btnFiltros">Limpiar Filtros</button>
-                        <button type="button" id="editar" style="margin: 3px" class="btnEditar">Editar</button>
-                        <button type="button" id="historicoIsla" class="btnHistorico">Histórico Isla</button>
+                        <div class="divFiltros">
+                            <label for="columns" class="textFiltros"><b>Seleccionar columna:</b></label>
+                            <select name="columns" id="selectFiltros" class="selectFiltros">
+                                <option value="2">Sucursal</option>
+                                <option value="3">Numero Unidad</option>
+                                <option value="5">Ubicacion</option>
+                                <option value="10">Estado Caja</option>
+                            </select><br>
+                            <input type="text" id="filtros" placeholder="Ingresar filtro" style="margin: 3px; width: 140px;" />
+                        </div>
+                        <div class="divBotones">
+                            <button type="button" id="limpiarFiltros" style="margin: 3px" class="btnFiltros">Limpiar Filtros</button>
+                            <button type="button" id="editar" style="margin: 3px" class="btnEditar">Editar</button>
+                        </div>
+                        <div class="divBtnHistorico">
+                            <button type="button" id="historicoIsla" style="margin: 3px" class="btnHistorico">Histórico Isla</button>
+                        </div>
                     </div>
-                    <!--<div id="btnHistorico" class="btnHistorico">
-                        <button type="button" id="historicoIsla">Historico Isla</button>
-                    </div>-->
+                    <div class="logoQuintaApp"></div>
                 <div id="remolques" class="table-container">
                     <div id="tabla2" style="margin: 10px"></div>
                 </div>

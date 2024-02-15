@@ -108,11 +108,11 @@ function actualizarTabla(data) {
   let diferenciaHoras;
 
   const numeroUnidadReemplazo = {
-    "3MAD0077": "3MAD0077S",
-    "3MA0074s": "3MA0074S",
-    "3MAD171935": "3MAD17193S",
+    //"3MAD0077": "3MAD0077S",
+    //"3MA0074s": "3MA0074S",
+    //"3MAD171935": "3MAD17193S",
     //"3MAD21231": "3MAD21231S",
-    "3MAD14100": "3MAD14100S",
+    //"3MAD14100": "3MAD14100S",
     // Agrega más mapeos según sea necesario
   };
 
@@ -137,10 +137,15 @@ function actualizarTabla(data) {
     if (numero_unidad !== null && movimiento.numero_unidad === numero_unidad) {
       // Mostrar SweetAlert2 con el estado de la caja al cargar la página
       const estadoCaja = movimiento.estado_caja.toUpperCase() === 'BUENO' ? 'Bueno' : 'Necesita Mantenimiento';
+      const estadoMovimiento = movimiento.estado === 'ENTRA' ? 'ENTRA' : 'SALE';
+      const sucursalMovimiento = movimiento.sucursal; // Suponiendo que el objeto movimiento tiene una propiedad 'sucursal'
+
       Swal.fire({
-        title: 'Estado de la Caja',
-        text: `La caja con número ${numero_unidad} está en estado: ${estadoCaja}`,
-        icon: 'info',
+          title: 'Informacion de la Caja',
+          html: `La caja con número <strong>${numero_unidad}</strong> está en Sucursal: <strong>${sucursalMovimiento}</strong><br>
+          Ubicacion: <strong>${estadoMovimiento}</strong><br>
+          Estado: <strong>${estadoCaja}</strong>`,
+          icon: 'info',
       });
     }
 
@@ -151,12 +156,14 @@ function actualizarTabla(data) {
   movimiento.objetivo_traslado = movimiento.objetivo_traslado =
     movimiento.objetivo_traslado === 'Importacion' ? 'Importacion' :
     movimiento.objetivo_traslado === 'Exportacion' ? 'Exportacion' :
+    movimiento.objetivo_traslado === 'Dedicada' ? 'Dedicada' :
     'N/A';
 
   movimiento.cargada = movimiento.cargada =
     movimiento.cargada === 1 ? 'Cargada' :
     movimiento.cargada === 2 ? 'Descarga' :
     movimiento.cargada === 3 ? 'Dedicada' :
+    movimiento.cargada === 4 ? 'Rentada' :
     'Vacia';
 
   //movimiento.estado_caja = movimiento.estado_caja === 'Bueno' || movimiento.estado_caja === 'BUENO' ? 'Bueno' : 'Necesita Mantenimiento';
@@ -447,7 +454,7 @@ function finalizarTemporizador() {
       console.log('Horas que sobraron:', horasSobrantes);
       console.log('Horas Diagnostico:', registroUnidad.diagnostico);
 
-      window.location.reload();
+      //window.location.reload();
     })
     .catch(error => {
       console.error('Error al finalizar el temporizador:', error);
@@ -634,6 +641,7 @@ window.mostrarHistorico = function (row) {
       filters: true, // Habilita los filtros
       dropdownMenu: ['filter_by_condition', 'filter_by_value', 'filter_action_bar'], // Tipo de filtro
       licenseKey: 'non-commercial-and-evaluation',
+      
       hiddenColumns: {
         columns: [0, 1],
       },
@@ -661,8 +669,9 @@ window.mostrarHistorico = function (row) {
             cellProperties.renderer = function (instance, td, row, col, prop, value, cellProperties) {
               const horas = Math.floor(value / 60);
               const minutos = value % 60;
+              const tiempoFormateado = `${horas} horas ${minutos} minutos`;
 
-              td.innerHTML = `${horas} horas ${minutos} minutos`;
+              td.innerHTML = tiempoFormateado;
               td.className = getColorClass(value); // Aplicar la clase de estilo
           };
         } else if (col === columns.findIndex(col => col.data === 'fecha')) {
@@ -747,6 +756,9 @@ function construirHistoricoHTML(historico) {
     return html;
 }
 
+const selectFiltros = document.getElementById('selectFiltros');
+const inputFiltros = document.getElementById('filtros');
+
   // get the `Filters` plugin, so you can use its API
 const filters = hot.getPlugin('Filters');
 
@@ -767,6 +779,19 @@ function getColorClass(minutos) {
     }
   }
 
+  // Evento input para el input
+  inputFiltros.addEventListener('input', function (event) {
+    //const filtersPlugin = hot.getPlugin('Filters');
+    const columnaSeleccionada = selectFiltros.value;
+    const valorFiltro = event.target.value;
+
+    filters.removeConditions(columnaSeleccionada);
+    filters.addCondition(columnaSeleccionada, 'contains', [valorFiltro]);
+    filters.filter();
+
+    hot.render();
+});
+
 }
 
 function crearObjetoDatos(filaActualizada) {
@@ -783,8 +808,8 @@ function crearObjetoDatos(filaActualizada) {
   // Define las reglas de validación
   const reglaSucursal = /^(Queretaro|Nuevo Laredo|Mexico|Laredo, Texas)$/;
   const reglaEstado = /^(ENTRA|SALE)$/;
-  const reglaCargada = /^(Cargada|Descarga|Dedicada|Vacia)$/;
-  const reglaObjetivoTraslado = /^(Importacion|Exportacion|N\/A)$/;
+  const reglaCargada = /^(Cargada|Descarga|Dedicada|Vacia|Rentada)$/;
+  const reglaObjetivoTraslado = /^(Importacion|Exportacion|Dedicada|N\/A)$/;
   const reglaEstadoCaja = /^(Bueno|Necesita Mantenimiento)$/;
   //const reglaComentarios = /^(Bueno)$/;
 
@@ -835,6 +860,8 @@ function transformarValorCargada(valor) {
       return 2;
   } else if (valor === "Dedicada") {
       return 3;
+  }  else if (valor === "Dedicada") {
+      return 4;
   } else {
       // Valor no válido, maneja el caso en consecuencia
       return 0;
@@ -919,8 +946,18 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Obtener el input de comentarios y el radio button 'Necesita Mantenimiento'
     const comentariosDiv = document.getElementById('comentariosDiv');
-    const estadoCajaRadioButton = document.querySelector('input[name="estadoCaja2"][value="Necesita Mantenimiento"]');
 
+    const estadoCajaRadioButtonBueno = document.querySelector('input[name="estadoCaja2"][value="Bueno"]');
+    // Escuchar el evento de cambio en el radio button 'Bueno'
+    estadoCajaRadioButtonBueno.addEventListener('change', function () {
+      if (this.checked) {
+          comentariosDiv.style.display = 'block'; // Mostrar el input de comentarios
+      } else {
+          comentariosDiv.style.display = 'none'; // Ocultar el input de comentarios
+      }
+    });
+
+    const estadoCajaRadioButton = document.querySelector('input[name="estadoCaja2"][value="Necesita Mantenimiento"]');
     // Escuchar el evento de cambio en el radio button 'Necesita Mantenimiento'
     estadoCajaRadioButton.addEventListener('change', function () {
         if (this.checked) {
@@ -998,7 +1035,8 @@ document.addEventListener('DOMContentLoaded', function () {
       const comentarios = comentariosDiv.style.display === 'block' ? document.getElementById('comentarios').value : ''; // Obtener los comentarios si se muestran
 
       // Concatenar los comentarios al valor de 'Estado_Caja' si hay comentarios
-      const estadoCajaFinal = estadoCaja2 === 'Necesita Mantenimiento' && comentarios ? `Comentarios: ${comentarios}` : estadoCaja2;
+      //const estadoCajaFinal = estadoCaja2 === 'Necesita Mantenimiento' && comentarios ? `Comentarios: ${comentarios}` : estadoCaja2;
+      const estadoCajaFinal = (estadoCaja2 === 'Necesita Mantenimiento' || estadoCaja2 === 'Bueno') && comentarios ? `${comentarios}` : estadoCaja2;
 
       const estadoCaja3 = document.querySelector('input[name="estadoCaja3"]:checked').value;
 
@@ -1126,7 +1164,8 @@ document.addEventListener('DOMContentLoaded', function () {
       const comentarios = comentariosDiv.style.display === 'block' ? document.getElementById('comentarios').value : ''; // Obtener los comentarios si se muestran
 
       // Concatenar los comentarios al valor de 'Estado_Caja' si hay comentarios
-      const estadoCajaFinal = estadoCaja2 === 'Necesita Mantenimiento' && comentarios ? `Comentarios: ${comentarios}` : estadoCaja2;
+      //const estadoCajaFinal = estadoCaja2 === 'Necesita Mantenimiento' && comentarios ? `Comentarios: ${comentarios}` : estadoCaja2;
+      const estadoCajaFinal = (estadoCaja2 === 'Necesita Mantenimiento' || estadoCaja2 === 'Bueno') && comentarios ? `${comentarios}` : estadoCaja2;
 
       const estadoCaja3 = document.querySelector('input[name="estadoCaja3"]:checked').value;
   
